@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RavenMarket CS2</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="./style.css">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
-<body>
+<body style="background-color: #12141c; color: #e1e6eb;">
     <header>
         <h1>Обмен предметов</h1>
         <span class="subtitle">CS2 Inventory</span>
@@ -18,14 +18,12 @@
         <button id="reset-btn" class="btn-secondary">Сбросить</button>
     </div>
 
-    <div id="inventory-grid" class="inventory-grid">
-        <!-- Карточки генерируются через app.js -->
-    </div>
+    <div id="inventory-grid" class="inventory-grid"></div>
 
     <div class="action-bar">
         <button id="submit-btn" class="btn-submit" disabled>Обменять выбранное</button>
     </div>
 
-    <script src="app.js"></script>
+    <script src="./app.js"></script>
 </body>
 </html>
