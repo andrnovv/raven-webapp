@@ -1,0 +1,47 @@
+/* --- Стили для картинок, цен и наклеек --- */
+
+/* Картинка скина внутри блока .preview */
+.preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 4px;
+}
+
+/* Бедж с ценой в правом верхнем углу карточки */
+.price-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(13, 15, 21, 0.85);
+  border: 1px solid var(--line);
+  padding: 2px 6px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--ok);
+  z-index: 2;
+}
+
+/* Корректировка галочки выбора, чтобы не перекрывать цену */
+.item.selected .price-badge {
+  right: 34px; /* Сдвигаем цену влево, если карточка выбрана */
+}
+
+/* Контейнер для наклеек внизу карточки */
+.stickers-list {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  justify-content: flex-start;
+  margin-top: auto;
+  padding-top: 4px;
+}
+
+/* Иконки наклеек */
+.sticker-img {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+}
