@@ -4,10 +4,138 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RavenMarket CS2</title>
-    <link rel="stylesheet" href="./style.css">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background-color: #12141c;
+            color: #e1e6eb;
+            padding: 16px;
+            padding-bottom: 90px;
+        }
+
+        header h1 {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            color: #8f98a0;
+            font-size: 12px;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #1e222d;
+            padding: 10px 14px;
+            border-radius: 8px;
+            margin: 16px 0;
+        }
+
+        .btn-secondary {
+            background: #2a2e3d;
+            color: #ccc;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .inventory-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(105px, 1fr));
+            gap: 10px;
+        }
+
+        .item-card {
+            background: #1e222d;
+            border: 2px solid transparent;
+            border-radius: 10px;
+            padding: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .item-card.selected {
+            border-color: #a4d007;
+            background: #232d1d;
+        }
+
+        .item-card img {
+            width: 75px;
+            height: 55px;
+            object-fit: contain;
+            margin: 4px 0;
+        }
+
+        .item-name {
+            font-size: 10px;
+            color: #b8c6d4;
+            line-height: 1.2;
+            height: 24px;
+            overflow: hidden;
+        }
+
+        .item-price {
+            font-size: 12px;
+            color: #a4d007;
+            font-weight: 700;
+        }
+
+        .stickers-row {
+            display: flex;
+            gap: 3px;
+            margin-top: 4px;
+        }
+
+        .stickers-row img {
+            width: 14px;
+            height: 14px;
+        }
+
+        .action-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #181a24;
+            padding: 12px 16px;
+            border-top: 1px solid #2a2e3d;
+        }
+
+        .btn-submit {
+            width: 100%;
+            background: #a4d007;
+            color: #12141c;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .btn-submit:disabled {
+            background: #2a2e3d;
+            color: #666;
+        }
+    </style>
 </head>
-<body style="background-color: #12141c; color: #e1e6eb;">
+<body>
     <header>
         <h1>Обмен предметов</h1>
         <span class="subtitle">CS2 Inventory</span>
@@ -24,6 +152,103 @@
         <button id="submit-btn" class="btn-submit" disabled>Обменять выбранное</button>
     </div>
 
-    <script src="./app.js"></script>
+    <script>
+        const tg = window.Telegram ? window.Telegram.WebApp : null;
+        if (tg) tg.expand();
+
+        const MOCK_INVENTORY = [
+            {
+                asset_id: "101",
+                name: "AK-47 | Redline (Field-Tested)",
+                price_rub: 1850,
+                image_url: "https://community.cloudflare.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLVb4a53NMhzpdefsCg44_414wHMr80M41gLv27g38Th28UG4E59f23SgE0R1kLAcL3PfnKA1e3PzYdXMTu4zkxdnfxaO1MrPThT8Ju5Bz3-zA9Iqi0QXh-Us6ZmzyddKSJ1A8YQrT_1PvyOnn0MXpv5vPy2wj5HcozSGFXw",
+                stickers: [
+                    "https://community.cloudflare.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLVb4a53NMhzpdefsCg44_414wHMr80M41gLv27g38Th28UG4E59f23SgE0R1kLAcA0PfvKhB41_S5UaU24vKwkNq_xKekG-OClzkGvsJwz-mX9IuginKw_0E6YmClc4SScgA3NFiD_AS4xrPuhAnQx9T42yA/64fx64f"
+                ]
+            },
+            {
+                asset_id: "102",
+                name: "AWP | Asiimov (Field-Tested)",
+                price_rub: 9400,
+                image_url: "https://community.cloudflare.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLVb4a53NMhzpdefsCg44_414wHMr80M41gLv27g38Th28UG4E59f23SgE0R1kLAcL3PfnKA1e3PzYdXMTu4zkxdnfxaO1MrPThT8Ju5Bz3-zA9Iqi0QXh-Us6ZmzyddKSJ1A8YQrT_1PvyOnn0MXpv5vPy2wj5HcozSGFXw",
+                stickers: []
+            },
+            {
+                asset_id: "103",
+                name: "Revolution Case",
+                price_rub: 75.5,
+                image_url: "https://community.cloudflare.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLVb4a53NMhzpdefsCg44_414wHMr80M41gLv27g38Th28UG4E59f23SgE0R1kLAcL3PfnKA1e3PzYdXMTu4zkxdnfxaO1MrPThT8Ju5Bz3-zA9Iqi0QXh-Us6ZmzyddKSJ1A8YQrT_1PvyOnn0MXpv5vPy2wj5HcozSGFXw",
+                stickers: []
+            }
+        ];
+
+        let selectedIds = new Set();
+
+        function renderInventory() {
+            const grid = document.getElementById("inventory-grid");
+            grid.innerHTML = "";
+
+            MOCK_INVENTORY.forEach(item => {
+                const card = document.createElement("div");
+                card.className = `item-card ${selectedIds.has(item.asset_id) ? 'selected' : ''}`;
+                
+                let stickersHtml = "";
+                if (item.stickers && item.stickers.length > 0) {
+                    stickersHtml = `<div class="stickers-row">` + 
+                        item.stickers.map(s => `<img src="${s}" alt="sticker">`).join("") + 
+                        `</div>`;
+                }
+
+                card.innerHTML = `
+                    <div class="item-price">${item.price_rub.toLocaleString('ru-RU')} ₽</div>
+                    <img src="${item.image_url}" alt="${item.name}">
+                    <div class="item-name">${item.name}</div>
+                    ${stickersHtml}
+                `;
+
+                card.onclick = () => toggleSelect(item.asset_id);
+                grid.appendChild(card);
+            });
+
+            updateSummary();
+        }
+
+        function toggleSelect(id) {
+            if (selectedIds.has(id)) {
+                selectedIds.delete(id);
+            } else {
+                selectedIds.add(id);
+            }
+            renderInventory();
+        }
+
+        function updateSummary() {
+            const selectedItems = MOCK_INVENTORY.filter(i => selectedIds.has(i.asset_id));
+            const totalSum = selectedItems.reduce((acc, curr) => acc + curr.price_rub, 0);
+            
+            document.getElementById("selected-count").innerText = `Выбрано: ${selectedItems.length} (${totalSum.toLocaleString('ru-RU')} ₽)`;
+            
+            const submitBtn = document.getElementById("submit-btn");
+            submitBtn.disabled = selectedItems.length === 0;
+        }
+
+        document.getElementById("reset-btn").onclick = () => {
+            selectedIds.clear();
+            renderInventory();
+        };
+
+        document.getElementById("submit-btn").onclick = () => {
+            const selectedItems = MOCK_INVENTORY.filter(i => selectedIds.has(i.asset_id));
+            if (tg) {
+                tg.sendData(JSON.stringify({
+                    action: "create_trade",
+                    items: selectedItems
+                }));
+                tg.close();
+            }
+        };
+
+        renderInventory();
+    </script>
 </body>
 </html>
