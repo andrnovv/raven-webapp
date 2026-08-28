@@ -1,31 +1,31 @@
 <!DOCTYPE html>
 <html lang="ru">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <title>CS2 Exchange</title>
-    <link rel="stylesheet" href="style.css" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RavenMarket CS2</title>
+    <link rel="stylesheet" href="style.css">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  </head>
-  <body>
-    <div class="app">
-      <header class="header">
-        <p class="eyebrow">CS2 WebApp</p>
-        <h1>Инвентарь</h1>
-        <p class="subtitle">Выберите предметы для обмена</p>
-      </header>
+</head>
+<body>
+    <header>
+        <h1>Обмен предметов</h1>
+        <span class="subtitle">CS2 Inventory</span>
+    </header>
 
-      <section class="toolbar">
-        <span id="selected-count">Выбрано: 0</span>
-        <button type="button" id="clear-btn" class="ghost" hidden>Сбросить</button>
-      </section>
-
-      <main id="grid" class="grid" aria-label="Сетка предметов"></main>
-
-      <footer class="footer">
-        <button type="button" id="trade-btn" disabled>Обменять выбранное</button>
-      </footer>
+    <div class="controls">
+        <span id="selected-count">Выбрано: 0 (0 ₽)</span>
+        <button id="reset-btn" class="btn-secondary">Сбросить</button>
     </div>
+
+    <div id="inventory-grid" class="inventory-grid">
+        <!-- Карточки генерируются через app.js -->
+    </div>
+
+    <div class="action-bar">
+        <button id="submit-btn" class="btn-submit" disabled>Обменять выбранное</button>
+    </div>
+
     <script src="app.js"></script>
-  </body>
+</body>
 </html>

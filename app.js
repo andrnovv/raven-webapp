@@ -1,134 +1,96 @@
-// Тестовые данные с поддержкой реальных картинок, цен и наклеек
-const ITEMS = [
-  { 
-    id: "1001", 
-    name: "AK-47 | Redline", 
-    wear: "Field-Tested", 
-    rarity: "classified", 
-    price_rub: 1850.00,
-    icon_url: "https://community.akamai.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLVb4cfB4l5045Wrf87v53pG8C2442OVs51dROx4E0s4lYJ7M0k_D2h-lX1y1S1ABQvu33fwB00v33f-R1z8O00d6-192lYJ8s41VRe_p_w-N508X80dW50d2l",
-    stickers: [
-      { name: "Natus Vincere | Katowice 2019", icon_url: "https://community.akamai.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLVb4cfB4l5045Wrf87v53pG8C2442OVs51dROx4E0s4lYJ7M0k_D2h-lX1y1S1ABQvu33fwB00v33f-R1z8O00d6-192lYJ8s41VRe_p_w-N508X80dW50d2l" },
-      { name: "FaZe Clan | Stockholm 2021", icon_url: "https://community.akamai.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLVb4cfB4l5045Wrf87v53pG8C2442OVs51dROx4E0s4lYJ7M0k_D2h-lX1y1S1ABQvu33fwB00v33f-R1z8O00d6-192lYJ8s41VRe_p_w-N508X80dW50d2l" }
-    ]
-  },
-  { 
-    id: "1002", 
-    name: "AWP | Asiimov", 
-    wear: "Field-Tested", 
-    rarity: "covert", 
-    price_rub: 9400.00,
-    icon_url: "https://community.akamai.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLVb4cfB4l5045Wrf87v53pG8C2442OVs51dROx4E0s4lYJ7M0k_D2h-lX1y1S1ABQvu33fwB00v33f-R1z8O00d6-192lYJ8s41VRe_p_w-N508X80dW50d2l",
-    stickers: []
-  },
-  { 
-    id: "1003", 
-    name: "Revolution Case", 
-    wear: "Base", 
-    rarity: "common", 
-    price_rub: 75.50,
-    icon_url: "https://community.akamai.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLVb4cfB4l5045Wrf87v53pG8C2442OVs51dROx4E0s4lYJ7M0k_D2h-lX1y1S1ABQvu33fwB00v33f-R1z8O00d6-192lYJ8s41VRe_p_w-N508X80dW50d2l",
-    stickers: []
-  }
+const tg = window.Telegram.WebApp;
+tg.expand();
+
+// Тестовый инвентарь с рабочими ссылками на картинки Steam
+const MOCK_INVENTORY = [
+    {
+        asset_id: "101",
+        name: "AK-47 | Redline (Field-Tested)",
+        price_rub: 1850,
+        image_url: "https://community.cloudflare.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLVb4a53NMhzpdefsCg44_414wHMr80M41gLv27g38Th28UG4E59f23SgE0R1kLAcL3PfnKA1e3PzYdXMTu4zkxdnfxaO1MrPThT8Ju5Bz3-zA9Iqi0QXh-Us6ZmzyddKSJ1A8YQrT_1PvyOnn0MXpv5vPy2wj5HcozSGFXw",
+        stickers: [
+            "https://community.cloudflare.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLVb4a53NMhzpdefsCg44_414wHMr80M41gLv27g38Th28UG4E59f23SgE0R1kLAcA0PfvKhB41_S5UaU24vKwkNq_xKekG-OClzkGvsJwz-mX9IuginKw_0E6YmClc4SScgA3NFiD_AS4xrPuhAnQx9T42yA/64fx64f",
+            "https://community.cloudflare.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLVb4a53NMhzpdefsCg44_414wHMr80M41gLv27g38Th28UG4E59f23SgE0R1kLAcL3PfnKA1e3PzYdXMTu4zkxdnfxaO1MrPThT8Ju5Bz3-zA9Iqi0QXh-Us6ZmzyddKSJ1A8YQrT_1PvyOnn0MXpv5vPy2wj5HcozSGFXw/64fx64f"
+        ]
+    },
+    {
+        asset_id: "102",
+        name: "AWP | Asiimov (Field-Tested)",
+        price_rub: 9400,
+        image_url: "https://community.cloudflare.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLVb4a53NMhzpdefsCg44_414wHMr80M41gLv27g38Th28UG4E59f23SgE0R1kLAcL3PfnKA1e3PzYdXMTu4zkxdnfxaO1MrPThT8Ju5Bz3-zA9Iqi0QXh-Us6ZmzyddKSJ1A8YQrT_1PvyOnn0MXpv5vPy2wj5HcozSGFXw",
+        stickers: []
+    },
+    {
+        asset_id: "103",
+        name: "Revolution Case",
+        price_rub: 75.5,
+        image_url: "https://community.cloudflare.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLVb4a53NMhzpdefsCg44_414wHMr80M41gLv27g38Th28UG4E59f23SgE0R1kLAcL3PfnKA1e3PzYdXMTu4zkxdnfxaO1MrPThT8Ju5Bz3-zA9Iqi0QXh-Us6ZmzyddKSJ1A8YQrT_1PvyOnn0MXpv5vPy2wj5HcozSGFXw",
+        stickers: []
+    }
 ];
 
-const selectedIds = new Set();
+let selectedIds = new Set();
 
-const grid = document.getElementById("grid");
-const countEl = document.getElementById("selected-count");
-const tradeBtn = document.getElementById("trade-btn");
-const clearBtn = document.getElementById("clear-btn");
-const tg = window.Telegram?.WebApp;
+function renderInventory() {
+    const grid = document.getElementById("inventory-grid");
+    grid.innerHTML = "";
 
-function renderGrid() {
-  grid.replaceChildren(
-    ...ITEMS.map((item) => {
-      const button = document.createElement("button");
-      button.type = "button";
-      button.className = `item rarity-${item.rarity}`;
-      button.dataset.id = item.id;
+    MOCK_INVENTORY.forEach(item => {
+        const card = document.createElement("div");
+        card.className = `item-card ${selectedIds.has(item.asset_id) ? 'selected' : ''}`;
+        
+        let stickersHtml = "";
+        if (item.stickers && item.stickers.length > 0) {
+            stickersHtml = `<div class="stickers-row">` + 
+                item.stickers.map(s => `<img src="${s}" alt="sticker">`).join("") + 
+                `</div>`;
+        }
 
-      // Генерируем верстку для ряда наклеек, если они есть
-      const stickersHtml = item.stickers && item.stickers.length > 0
-        ? `<div class="stickers-list">
-            ${item.stickers.map(s => `<img src="${s.icon_url}" title="${s.name}" class="sticker-img" />`).join('')}
-           </div>`
-        : '';
+        card.innerHTML = `
+            <div class="item-price">${item.price_rub.toLocaleString('ru-RU')} ₽</div>
+            <img src="${item.image_url}" alt="${item.name}" loading="lazy">
+            <div class="item-name">${item.name}</div>
+            ${stickersHtml}
+        `;
 
-      button.innerHTML = `
-        <div class="price-badge">${item.price_rub.toLocaleString('ru-RU')} ₽</div>
-        <div class="preview">
-          <img src="${item.icon_url}" alt="${item.name}" loading="lazy" />
-        </div>
-        <div class="name">${item.name}</div>
-        <div class="wear">${item.wear}</div>
-        ${stickersHtml}
-      `;
-      button.addEventListener("click", () => toggleItem(item.id));
-      return button;
-    })
-  );
+        card.onclick = () => toggleSelect(item.asset_id);
+        grid.appendChild(card);
+    });
+
+    updateSummary();
 }
 
-function toggleItem(id) {
-  if (selectedIds.has(id)) {
-    selectedIds.delete(id);
-  } else {
-    selectedIds.add(id);
-  }
-  syncUi();
+function toggleSelect(id) {
+    if (selectedIds.has(id)) {
+        selectedIds.delete(id);
+    } else {
+        selectedIds.add(id);
+    }
+    renderInventory();
 }
 
-function clearSelection() {
-  selectedIds.clear();
-  syncUi();
+function updateSummary() {
+    const selectedItems = MOCK_INVENTORY.filter(i => selectedIds.has(i.asset_id));
+    const totalSum = selectedItems.reduce((acc, curr) => acc + curr.price_rub, 0);
+    
+    document.getElementById("selected-count").innerText = `Выбрано: ${selectedItems.length} (${totalSum.toLocaleString('ru-RU')} ₽)`;
+    
+    const submitBtn = document.getElementById("submit-btn");
+    submitBtn.disabled = selectedItems.length === 0;
 }
 
-function selectedItems() {
-  return ITEMS.filter((item) => selectedIds.has(item.id));
-}
+document.getElementById("reset-btn").onclick = () => {
+    selectedIds.clear();
+    renderInventory();
+};
 
-function syncUi() {
-  const selected = selectedItems();
-  const count = selected.length;
-  const totalPrice = selected.reduce((sum, item) => sum + item.price_rub, 0);
+document.getElementById("submit-btn").onclick = () => {
+    const selectedItems = MOCK_INVENTORY.filter(i => selectedIds.has(i.asset_id));
+    tg.sendData(JSON.stringify({
+        action: "create_trade",
+        items: selectedItems
+    }));
+    tg.close();
+};
 
-  countEl.textContent = `Выбрано: ${count} (${totalPrice.toLocaleString('ru-RU')} ₽)`;
-  tradeBtn.disabled = count === 0;
-  clearBtn.hidden = count === 0;
-
-  for (const card of grid.querySelectorAll(".item")) {
-    card.classList.toggle("selected", selectedIds.has(card.dataset.id));
-  }
-}
-
-function sendTrade() {
-  const items = selectedItems();
-  if (!items.length) {
-    return;
-  }
-
-  const payload = JSON.stringify({
-    action: "trade",
-    items: items.map(({ id, name, wear, rarity, price_rub }) => ({ id, name, wear, rarity, price_rub })),
-  });
-
-  if (tg?.sendData) {
-    tg.sendData(payload);
-    return;
-  }
-
-  tradeBtn.textContent = `Выбрано ${items.length}`;
-}
-
-if (tg) {
-  tg.ready();
-  tg.expand();
-  tg.setHeaderColor?.("#0d0f15");
-  tg.setBackgroundColor?.("#0d0f15");
-}
-
-renderGrid();
-syncUi();
-clearBtn.addEventListener("click", clearSelection);
-tradeBtn.addEventListener("click", sendTrade);
+renderInventory();
