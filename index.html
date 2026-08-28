@@ -156,28 +156,27 @@
         const tg = window.Telegram ? window.Telegram.WebApp : null;
         if (tg) tg.expand();
 
+        // Данные со ссылками на папку images/
         const MOCK_INVENTORY = [
             {
                 asset_id: "101",
                 name: "AK-47 | Redline (Field-Tested)",
                 price_rub: 1850,
-                image_url: "https://steamcommunity-a.akamaihd.net/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLVb4a53NMhzpdefsCg44_414wHMr80M41gLv27g38Th28UG4E59f23SgE0R1kLAcL3PfnKA1e3PzYdXMTu4zkxdnfxaO1MrPThT8Ju5Bz3-zA9Iqi0QXh-Us6ZmzyddKSJ1A8YQrT_1PvyOnn0MXpv5vPy2wj5HcozSGFXw/360fx360f",
-                stickers: [
-                    "https://steamcommunity-a.akamaihd.net/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLVb4a53NMhzpdefsCg44_414wHMr80M41gLv27g38Th28UG4E59f23SgE0R1kLAcA0PfvKhB41_S5UaU24vKwkNq_xKekG-OClzkGvsJwz-mX9IuginKw_0E6YmClc4SScgA3NFiD_AS4xrPuhAnQx9T42yA/64fx64f"
-                ]
+                image_url: "./images/ak47.png",
+                stickers: []
             },
             {
                 asset_id: "102",
                 name: "AWP | Asiimov (Field-Tested)",
                 price_rub: 9400,
-                image_url: "https://steamcommunity-a.akamaihd.net/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLVb4a53NMhzpdefsCg44_414wHMr80M41gLv27g38Th28UG4E59f23SgE0R1kLAcL3PfnKA1p235S6M2C2S6dKkI2Y2_0NPh_j2E3f324u9c9i4mGv-Epv2WOn2uC6A/360fx360f",
+                image_url: "./images/awp.png",
                 stickers: []
             },
             {
                 asset_id: "103",
                 name: "Revolution Case",
                 price_rub: 75.5,
-                image_url: "https://steamcommunity-a.akamaihd.net/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLVb4a53NMhzpdefsCg44_414wHMr80M41gLv27g38Th28UG4E59f23SgE0R1kLAcL3PfnKA1n0vXZcD-CgI1oA83a32A9J0E0_3Sg1m-_oT_5_1bC_0fGvA_1WjO9/360fx360f",
+                image_url: "./images/case.png",
                 stickers: []
             }
         ];
