@@ -12,7 +12,6 @@
       --card-selected: #202d40;
       --border: #283548;
       --accent: #2563eb;
-      --accent-hover: #1d4ed8;
       --blue-soft: #38bdf8;
       --text-white: #ffffff;
       --text-gray: #94a3b8;
@@ -34,7 +33,6 @@
       padding-bottom: 95px;
     }
 
-    /* 1, 2, 3: Header */
     .top-bar {
       display: flex;
       justify-content: space-between;
@@ -60,7 +58,6 @@
       font-size: 10px;
       color: var(--text-gray);
       text-transform: uppercase;
-      letter-spacing: 0.5px;
     }
 
     .stat-val {
@@ -91,7 +88,6 @@
       object-fit: cover;
     }
 
-    /* 4, 5: Tabs */
     .tabs-nav {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -120,7 +116,6 @@
       color: var(--text-white);
     }
 
-    /* 7, 8: Controls */
     .controls-row {
       display: flex;
       justify-content: space-between;
@@ -129,7 +124,7 @@
       margin-bottom: 14px;
     }
 
-    .btn-sort {
+    .btn-sort, .btn-filter {
       background: var(--card-bg);
       border: 1px solid var(--border);
       color: var(--text-white);
@@ -140,19 +135,6 @@
       display: flex;
       align-items: center;
       gap: 6px;
-    }
-
-    .btn-filter {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      color: var(--text-white);
-      font-size: 12px;
-      padding: 7px 12px;
-      border-radius: 8px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 5px;
     }
 
     .filter-panel {
@@ -180,7 +162,6 @@
       outline: none;
     }
 
-    /* 2 Columns Grid */
     .items-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -249,7 +230,6 @@
       overflow: hidden;
     }
 
-    /* 6: Bottom Action Bar */
     .bottom-bar {
       position: fixed;
       bottom: 0;
@@ -257,7 +237,6 @@
       right: 0;
       padding: 14px;
       background: rgba(15, 20, 28, 0.95);
-      backdrop-filter: blur(8px);
       border-top: 1px solid var(--border);
       z-index: 100;
     }
@@ -293,7 +272,6 @@
 </head>
 <body>
 
-  <!-- 1, 2, 3: Header -->
   <div class="top-bar">
     <div class="stats-container">
       <div class="stat-badge">
@@ -308,13 +286,11 @@
     <div class="avatar-wrapper" id="userAvatar">U</div>
   </div>
 
-  <!-- 4, 5: Tabs -->
   <div class="tabs-nav">
     <button class="tab-btn" id="tabUser" onclick="switchTab('user')">Мой инвентарь</button>
     <button class="tab-btn active" id="tabBot" onclick="switchTab('bot')">Магазин бота</button>
   </div>
 
-  <!-- 7, 8: Controls -->
   <div class="controls-row">
     <button class="btn-sort" id="sortBtn" onclick="toggleSort()">
       <span id="sortLabel">По умолчанию</span>
@@ -326,7 +302,6 @@
     </button>
   </div>
 
-  <!-- 7: Dropdown Filters -->
   <div class="filter-panel" id="filterPanel">
     <select class="filter-select" id="weaponFilter" onchange="applyFilters()">
       <option value="all">Все оружия</option>
@@ -339,31 +314,20 @@
       <option value="Нож">Ножи</option>
       <option value="Кейс">Кейсы</option>
     </select>
-
-    <select class="filter-select" id="rarityFilter" onchange="applyFilters()">
-      <option value="all">Любая редкость</option>
-      <option value="Тайное">Тайное (Красное)</option>
-      <option value="Засекреченное">Засекреченное (Розовое)</option>
-      <option value="Запрещенное">Запрещенное (Фиолетовое)</option>
-      <option value="Армейское">Армейское (Синее)</option>
-    </select>
-
     <select class="filter-select" id="wearFilter" onchange="applyFilters()">
       <option value="all">Любой износ</option>
-      <option value="FN">Factory New (Прямо с завода)</option>
-      <option value="MW">Minimal Wear (Немного поношенное)</option>
-      <option value="FT">Field-Tested (После полевых)</option>
-      <option value="WW">Well-Worn (Поношенное)</option>
-      <option value="BS">Battle-Scarred (Закаленное в боях)</option>
+      <option value="FN">Factory New</option>
+      <option value="MW">Minimal Wear</option>
+      <option value="FT">Field-Tested</option>
+      <option value="WW">Well-Worn</option>
+      <option value="BS">Battle-Scarred</option>
     </select>
   </div>
 
-  <!-- 2 Columns Grid -->
   <div class="items-grid" id="itemsGrid">
     <div class="status-box">Загрузка скинов...</div>
   </div>
 
-  <!-- 6: Submit Button -->
   <div class="bottom-bar">
     <button class="btn-trade" id="tradeBtn" onclick="submitTrade()">Обменять</button>
   </div>
@@ -375,8 +339,9 @@
       tg.expand();
     }
 
-    // Подставляем аватарку Telegram
     const tgUser = tg?.initDataUnsafe?.user;
+    const currentTgId = tgUser ? tgUser.id : 676723587; // fallback на твой Telegram ID для тестов
+
     const avatarWrapper = document.getElementById("userAvatar");
     if (tgUser && tgUser.photo_url) {
       avatarWrapper.innerHTML = `<img class="avatar-img" src="${tgUser.photo_url}" alt="User">`;
@@ -384,14 +349,15 @@
       avatarWrapper.textContent = tgUser.first_name[0].toUpperCase();
     }
 
-    // Твой текущий URL туннеля (FastAPI)
-    const API_URL = "https://yellow-lands-relate.loca.lt/api/items";
+    // Твой текущий URL туннеля
+    const BASE_URL = "https://yellow-lands-relate.loca.lt";
 
-    let activeTab = 'bot'; // 'user' или 'bot'
-    let rawItems = [];
+    let activeTab = 'bot';
+    let botItems = [];
+    let userItems = [];
     let displayedItems = [];
     let selectedIds = new Set();
-    let sortState = 0; // 0: default, 1: asc, 2: desc
+    let sortState = 0;
 
     function extractWear(name) {
       if (name.includes("Factory New")) return "FN";
@@ -404,21 +370,35 @@
 
     async function loadCatalog() {
       try {
-        const res = await fetch(API_URL, {
-          headers: {
-            "bypass-tunnel-reminder": "true",
-            "Bypass-Tunnel-Reminder": "1"
-          }
+        const res = await fetch(`${BASE_URL}/api/items`, {
+          headers: { "bypass-tunnel-reminder": "true" }
         });
         const data = await res.json();
-        rawItems = (data.items || []).map(i => ({
-          ...i,
-          wear: extractWear(i.name)
-        }));
+        botItems = (data.items || []).map(i => ({ ...i, wear: extractWear(i.name) }));
         applyFilters();
       } catch (e) {
         document.getElementById("itemsGrid").innerHTML = 
-          `<div class="status-box">Ошибка загрузки данных.<br>Проверь туннель и api_server.py</div>`;
+          `<div class="status-box">Ошибка загрузки магазина бота.</div>`;
+      }
+    }
+
+    async function loadUserInventory() {
+      document.getElementById("itemsGrid").innerHTML = 
+        `<div class="status-box">Загрузка вашего инвентаря из Steam...</div>`;
+      try {
+        const res = await fetch(`${BASE_URL}/api/user-items?telegram_id=${currentTgId}`, {
+          headers: { "bypass-tunnel-reminder": "true" }
+        });
+        if (!res.ok) {
+          const err = await res.json();
+          throw new Error(err.detail || "Ошибка");
+        }
+        const data = await res.json();
+        userItems = (data.items || []).map(i => ({ ...i, wear: extractWear(i.name) }));
+        applyFilters();
+      } catch (e) {
+        document.getElementById("itemsGrid").innerHTML = 
+          `<div class="status-box">${e.message}</div>`;
       }
     }
 
@@ -427,12 +407,16 @@
       document.getElementById("tabUser").classList.toggle("active", tab === 'user');
       document.getElementById("tabBot").classList.toggle("active", tab === 'bot');
       selectedIds.clear();
-      applyFilters();
+
+      if (tab === 'user' && userItems.length === 0) {
+        loadUserInventory();
+      } else {
+        applyFilters();
+      }
     }
 
     function toggleFilterPanel() {
-      const p = document.getElementById("filterPanel");
-      p.classList.toggle("open");
+      document.getElementById("filterPanel").classList.toggle("open");
     }
 
     function toggleSort() {
@@ -454,40 +438,27 @@
     }
 
     function applyFilters() {
-      if (activeTab === 'user') {
-        displayedItems = [];
-        renderGrid("Ваш инвентарь пока пуст (загружается через трейд-ссылку)");
-        updateSummary();
-        return;
-      }
-
+      const source = activeTab === 'bot' ? botItems : userItems;
       const weapon = document.getElementById("weaponFilter").value;
       const wear = document.getElementById("wearFilter").value;
 
-      displayedItems = rawItems.filter(item => {
+      displayedItems = source.filter(item => {
         let matchWeapon = (weapon === 'all') || item.name.includes(weapon);
         let matchWear = (wear === 'all') || (item.wear === wear);
         return matchWeapon && matchWear;
       });
 
-      if (sortState === 1) {
-        displayedItems.sort((a, b) => a.price - b.price);
-      } else if (sortState === 2) {
-        displayedItems.sort((a, b) => b.price - a.price);
-      }
+      if (sortState === 1) displayedItems.sort((a, b) => a.price - b.price);
+      if (sortState === 2) displayedItems.sort((a, b) => b.price - a.price);
 
       renderGrid();
       updateSummary();
     }
 
-    function renderGrid(customMsg) {
+    function renderGrid() {
       const grid = document.getElementById("itemsGrid");
-      if (customMsg) {
-        grid.innerHTML = `<div class="status-box">${customMsg}</div>`;
-        return;
-      }
       if (displayedItems.length === 0) {
-        grid.innerHTML = `<div class="status-box">Ничего не найдено</div>`;
+        grid.innerHTML = `<div class="status-box">Предметы не найдены</div>`;
         return;
       }
 
@@ -521,14 +492,14 @@
     }
 
     function updateSummary() {
-      let invTotal = displayedItems.reduce((acc, i) => acc + Number(i.price), 0);
+      const currentList = activeTab === 'bot' ? botItems : userItems;
+      let invTotal = currentList.reduce((acc, i) => acc + Number(i.price), 0);
       document.getElementById("totalInventorySum").textContent = `${Math.round(invTotal)} ₽`;
 
       let selTotal = 0;
-      rawItems.forEach(i => {
+      currentList.forEach(i => {
         if (selectedIds.has(i.id)) selTotal += Number(i.price);
       });
-
       document.getElementById("selectedSum").textContent = `${Math.round(selTotal)} ₽`;
 
       const btn = document.getElementById("tradeBtn");
@@ -543,17 +514,14 @@
 
     function submitTrade() {
       if (selectedIds.size === 0) return;
-
-      const itemsToSend = rawItems
+      const currentList = activeTab === 'bot' ? botItems : userItems;
+      const itemsToSend = currentList
         .filter(i => selectedIds.has(i.id))
-        .map(i => ({
-          asset_id: i.id,
-          name: i.name,
-          price_rub: i.price
-        }));
+        .map(i => ({ asset_id: i.id, name: i.name, price_rub: i.price }));
 
       const payload = {
         action: "create_trade",
+        tab: activeTab,
         items: itemsToSend
       };
 
@@ -561,7 +529,7 @@
         tg.sendData(JSON.stringify(payload));
         tg.close();
       } else {
-        alert("Заказ отправлен:\n" + JSON.stringify(payload, null, 2));
+        alert("Заказ оформлен:\n" + JSON.stringify(payload, null, 2));
       }
     }
 
