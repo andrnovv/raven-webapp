@@ -3,21 +3,20 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>RavenMarket WebApp</title>
-  <!-- Telegram WebApp SDK -->
+  <title>RavenMarket</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
     :root {
       --bg-color: #12141a;
       --card-bg: #1a1d26;
-      --card-selected: #2a2f40;
-      --primary: #5c6ac4;
-      --accent: #58a6ff;
-      --price-color: #85e89d;
+      --card-selected: #2d3548;
+      --accent: #388bfd;
+      --price-color: #7ee787;
       --text-main: #f0f6fc;
       --text-muted: #8b949e;
       --border-color: #30363d;
-      --danger: #f85149;
+      --btn-green: #238636;
+      --btn-green-hover: #2ea043;
     }
 
     * {
@@ -31,21 +30,21 @@
     body {
       background-color: var(--bg-color);
       color: var(--text-main);
-      padding: 16px;
-      padding-bottom: 90px;
+      padding: 14px;
+      padding-bottom: 85px;
     }
 
     header {
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
 
     h1 {
-      font-size: 20px;
+      font-size: 19px;
       font-weight: 700;
     }
 
     .subtitle {
-      font-size: 13px;
+      font-size: 12px;
       color: var(--text-muted);
       margin-top: 2px;
     }
@@ -55,11 +54,11 @@
       justify-content: space-between;
       align-items: center;
       background: var(--card-bg);
-      padding: 10px 14px;
-      border-radius: 10px;
+      padding: 9px 12px;
+      border-radius: 8px;
       border: 1px solid var(--border-color);
-      margin-bottom: 16px;
-      font-size: 14px;
+      margin-bottom: 14px;
+      font-size: 13px;
     }
 
     .btn-reset {
@@ -69,32 +68,25 @@
       cursor: pointer;
       font-size: 13px;
     }
-    .btn-reset:hover {
-      color: var(--danger);
-    }
 
     .grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
+      gap: 8px;
     }
 
     .item-card {
       background: var(--card-bg);
       border: 1px solid var(--border-color);
-      border-radius: 10px;
+      border-radius: 8px;
       padding: 8px 6px;
       display: flex;
       flex-direction: column;
       align-items: center;
       text-align: center;
       cursor: pointer;
-      transition: border-color 0.15s ease, background 0.15s ease, transform 0.1s ease;
       position: relative;
-    }
-
-    .item-card:active {
-      transform: scale(0.97);
+      transition: background 0.15s ease, border-color 0.15s ease;
     }
 
     .item-card.selected {
@@ -103,21 +95,21 @@
     }
 
     .item-price {
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 700;
       color: var(--price-color);
-      margin-bottom: 6px;
+      margin-bottom: 4px;
     }
 
     .item-image {
-      width: 70px;
-      height: 50px;
+      width: 65px;
+      height: 48px;
       object-fit: contain;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
 
     .item-name {
-      font-size: 11px;
+      font-size: 10px;
       color: var(--text-muted);
       display: -webkit-box;
       -webkit-line-clamp: 2;
@@ -131,23 +123,22 @@
       bottom: 0;
       left: 0;
       right: 0;
-      padding: 12px 16px;
-      background: rgba(18, 20, 26, 0.92);
-      backdrop-filter: blur(8px);
+      padding: 12px 14px;
+      background: rgba(18, 20, 26, 0.95);
       border-top: 1px solid var(--border-color);
     }
 
     .btn-submit {
       width: 100%;
-      background: #238636;
+      background: var(--btn-green);
       border: none;
       color: #fff;
       font-size: 15px;
       font-weight: 600;
-      padding: 13px;
-      border-radius: 10px;
+      padding: 12px;
+      border-radius: 8px;
       cursor: pointer;
-      opacity: 0.5;
+      opacity: 0.4;
       pointer-events: none;
       transition: 0.2s ease;
     }
@@ -157,11 +148,11 @@
       pointer-events: auto;
     }
 
-    .loading-state, .error-state {
+    .status-msg {
       text-align: center;
-      padding: 40px 10px;
+      padding: 35px 10px;
       color: var(--text-muted);
-      font-size: 14px;
+      font-size: 13px;
       grid-column: span 3;
     }
   </style>
@@ -179,7 +170,7 @@
   </div>
 
   <div class="grid" id="itemsGrid">
-    <div class="loading-state">Загрузка скинов из инвентаря...</div>
+    <div class="status-msg">Загрузка скинов...</div>
   </div>
 
   <div class="bottom-bar">
@@ -193,8 +184,7 @@
       tg.expand();
     }
 
-    // URL твоего FastAPI туннеля
-    const API_URL = "https://upset-wolves-hope.loca.lt/api/items";
+    const API_URL = "https://yellow-lands-relate.loca.lt/api/items";
 
     let availableItems = [];
     let selectedItemIds = new Set();
@@ -207,25 +197,27 @@
     async function fetchCatalog() {
       try {
         const response = await fetch(API_URL, {
+          method: "GET",
           headers: {
-            "bypass-tunnel-reminder": "true" // Обход страницы проверки localtunnel
+            "bypass-tunnel-reminder": "true",
+            "Bypass-Tunnel-Reminder": "1"
           }
         });
-        
+
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        
+
         const data = await response.json();
         availableItems = data.items || [];
         renderGrid();
       } catch (err) {
-        console.error("Ошибка загрузки:", err);
-        grid.innerHTML = `<div class="error-state">Не удалось загрузить инвентарь.<br>Убедись, что запущен api_server.py и npx localtunnel.</div>`;
+        console.error(err);
+        grid.innerHTML = `<div class="status-msg">Не удалось загрузить инвентарь.<br>Убедись, что запущен api_server.py и туннель.</div>`;
       }
     }
 
     function renderGrid() {
       if (availableItems.length === 0) {
-        grid.innerHTML = `<div class="error-state">Инвентарь пуст</div>`;
+        grid.innerHTML = `<div class="status-msg">Инвентарь пуст</div>`;
         return;
       }
 
@@ -301,7 +293,7 @@
         tg.sendData(JSON.stringify(payload));
         tg.close();
       } else {
-        alert("Заказ оформлен (тестовый режим вне Telegram):\n" + JSON.stringify(payload, null, 2));
+        alert("Тестовая отправка:\n" + JSON.stringify(payload, null, 2));
       }
     };
 
