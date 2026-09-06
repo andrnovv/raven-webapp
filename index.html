@@ -1,166 +1,100 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Raven Market | CS2 Trade</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>RavenMarket</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
-    :root {
-      --bg-main: #0f141c;
-      --bg-card: #18202c;
-      --bg-hover: #1f2a3a;
-      --border-color: #273447;
-      --accent-blue: #2563eb;
-      --accent-hover: #1d4ed8;
-      --text-main: #f8fafc;
-      --text-muted: #94a3b8;
-      --badge-bg: #1e293b;
-      --badge-text: #38bdf8;
-      --price-color: #38bdf8;
-      --danger: #ef4444;
-    }
-
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      -webkit-tap-highlight-color: transparent;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     }
 
     body {
-      background-color: var(--bg-main);
-      color: var(--text-main);
-      min-height: 100vh;
-      padding-bottom: 90px;
+      background-color: #12171e;
+      color: #ffffff;
+      padding-bottom: 85px;
     }
 
-    /* Навигация по табам */
-    .tabs-header {
+    /* Навигация по вкладкам */
+    .tabs {
       display: flex;
-      background-color: #131b26;
-      border-bottom: 1px solid var(--border-color);
-      position: sticky;
-      top: 0;
-      z-index: 20;
+      background: #171e28;
+      border-bottom: 1px solid #232d3c;
     }
 
-    .tab-btn {
+    .tab {
       flex: 1;
-      padding: 14px 10px;
-      background: transparent;
-      border: none;
-      color: var(--text-muted);
-      font-size: 14px;
+      text-align: center;
+      padding: 14px;
+      font-size: 15px;
       font-weight: 600;
+      color: #8c9ba5;
       cursor: pointer;
       border-bottom: 2px solid transparent;
-      transition: all 0.2s ease;
+      transition: all 0.2s;
     }
 
-    .tab-btn.active {
-      color: #fff;
-      border-bottom-color: var(--accent-blue);
-      background-color: rgba(37, 99, 235, 0.05);
+    .tab.active {
+      color: #ffffff;
+      border-bottom-color: #2f6bf2;
     }
 
-    /* Блок поиска и фильтров */
-    .toolbar {
-      padding: 12px 14px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      background-color: #131b26;
-      border-bottom: 1px solid var(--border-color);
-    }
-
-    .search-input {
-      width: 100%;
-      background-color: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      padding: 10px 12px;
-      color: #fff;
-      font-size: 14px;
-      outline: none;
-    }
-
-    .search-input:focus {
-      border-color: var(--accent-blue);
-    }
-
-    .filters-row {
-      display: flex;
-      gap: 8px;
-    }
-
-    .filter-select {
-      flex: 1;
-      background-color: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      padding: 8px 10px;
-      color: var(--text-muted);
-      font-size: 13px;
-      outline: none;
-    }
-
-    /* Сетка предметов 2 в ряд */
-    .grid-container {
+    /* Сетка предметов */
+    .catalog {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
+      gap: 12px;
       padding: 14px;
     }
 
-    .item-card {
-      background-color: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 10px;
-      padding: 12px 10px;
+    .card {
+      background: #19222d;
+      border: 1px solid #253344;
+      border-radius: 12px;
+      padding: 12px;
       display: flex;
       flex-direction: column;
       align-items: center;
       text-align: center;
-      position: relative;
       cursor: pointer;
-      user-select: none;
-      transition: transform 0.15s ease, border-color 0.15s ease;
+      transition: transform 0.1s, border-color 0.2s;
+      position: relative;
     }
 
-    .item-card:active {
-      transform: scale(0.98);
+    .card:active {
+      transform: scale(0.97);
     }
 
-    .item-card.selected {
-      border-color: var(--accent-blue);
-      background-color: rgba(37, 99, 235, 0.08);
-      box-shadow: 0 0 0 1px var(--accent-blue);
+    .card.selected {
+      border-color: #2f6bf2;
+      background: #1a283b;
+      box-shadow: 0 0 0 1px #2f6bf2;
     }
 
-    .item-img-wrap {
+    .img-box {
       width: 100%;
-      height: 95px;
+      height: 100px;
       display: flex;
       align-items: center;
       justify-content: center;
       margin-bottom: 8px;
     }
 
-    .item-img {
-      max-width: 95%;
-      max-height: 95px;
+    .img-box img {
+      max-width: 90%;
+      max-height: 90px;
       object-fit: contain;
-      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5));
     }
 
     .item-name {
       font-size: 13px;
       font-weight: 600;
-      color: #fff;
       line-height: 1.3;
-      margin-bottom: 6px;
+      margin-bottom: 8px;
       height: 34px;
       overflow: hidden;
       display: -webkit-box;
@@ -168,160 +102,92 @@
       -webkit-box-orient: vertical;
     }
 
-    .meta-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 4px;
-      justify-content: center;
-      margin-bottom: 8px;
-      width: 100%;
-    }
-
-    .badge-wear {
-      font-size: 10px;
-      padding: 2px 6px;
-      background-color: var(--badge-bg);
-      color: var(--badge-text);
-      border-radius: 4px;
-      white-space: nowrap;
-    }
-
-    .badge-float {
-      font-size: 10px;
-      padding: 2px 6px;
-      background-color: #243042;
-      color: #cbd5e1;
-      border-radius: 4px;
-      font-family: monospace;
-    }
-
-    .item-price {
-      font-size: 14px;
+    .price {
+      font-size: 15px;
       font-weight: 700;
-      color: var(--price-color);
+      color: #38bdf8;
       margin-top: auto;
     }
 
-    /* Статусные сообщения */
-    .status-box {
+    /* Статус и загрузка */
+    .status-msg {
       grid-column: span 2;
       text-align: center;
-      padding: 40px 20px;
-      color: var(--text-muted);
+      padding: 50px 20px;
+      color: #8c9ba5;
       font-size: 14px;
-      line-height: 1.5;
-    }
-
-    .loader {
-      display: inline-block;
-      width: 24px;
-      height: 24px;
-      border: 3px solid rgba(255,255,255,0.1);
-      border-radius: 50%;
-      border-top-color: var(--accent-blue);
-      animation: spin 0.8s linear infinite;
-      margin-bottom: 12px;
-    }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
     }
 
     /* Нижняя плашка действий */
-    .action-bar {
+    .bottom-bar {
       position: fixed;
       bottom: 0;
       left: 0;
       right: 0;
-      background-color: #131b26;
-      border-top: 1px solid var(--border-color);
-      padding: 12px 16px;
+      background: #171e28;
+      border-top: 1px solid #232d3c;
+      padding: 14px 18px;
       display: flex;
-      align-items: center;
       justify-content: space-between;
-      z-index: 30;
+      align-items: center;
+      z-index: 100;
     }
 
-    .summary-info {
+    .total-info {
       display: flex;
       flex-direction: column;
     }
 
-    .summary-count {
+    .total-count {
       font-size: 12px;
-      color: var(--text-muted);
+      color: #8c9ba5;
     }
 
-    .summary-total {
-      font-size: 16px;
+    .total-sum {
+      font-size: 17px;
       font-weight: 700;
-      color: #fff;
+      color: #ffffff;
     }
 
-    .action-btn {
-      background-color: var(--accent-blue);
-      color: #fff;
+    .trade-btn {
+      background: #2f6bf2;
+      color: #ffffff;
       border: none;
       border-radius: 8px;
-      padding: 12px 20px;
+      padding: 12px 22px;
       font-size: 14px;
       font-weight: 600;
       cursor: pointer;
-      transition: background 0.2s ease;
+      transition: background 0.2s, opacity 0.2s;
     }
 
-    .action-btn:disabled {
-      background-color: #273447;
-      color: #64748b;
+    .trade-btn:disabled {
+      background: #232d3c;
+      color: #5d6e82;
       cursor: not-allowed;
     }
   </style>
 </head>
 <body>
 
-  <!-- Навигация -->
-  <div class="tabs-header">
-    <button class="tab-btn active" id="tabBot" onclick="switchTab('bot')">Скины бота</button>
-    <button class="tab-btn" id="tabUser" onclick="switchTab('user')">Мой инвентарь</button>
+  <!-- Табы -->
+  <div class="tabs">
+    <div class="tab active" id="tabBot" onclick="changeTab('bot')">Скины бота</div>
+    <div class="tab" id="tabUser" onclick="changeTab('user')">Мой инвентарь</div>
   </div>
 
-  <!-- Поиск и фильтрация -->
-  <div class="toolbar">
-    <input type="text" id="searchInput" class="search-input" placeholder="Поиск по названию..." oninput="handleFilterChange()" />
-    <div class="filters-row">
-      <select id="typeFilter" class="filter-select" onchange="handleFilterChange()">
-        <option value="all">Все типы</option>
-        <option value="knife">Ножи</option>
-        <option value="rifle">Винтовки (AK, M4, AWP)</option>
-        <option value="pistol">Пистолеты</option>
-        <option value="other">Прочее / Кейсы</option>
-      </select>
-      <select id="wearFilter" class="filter-select" onchange="handleFilterChange()">
-        <option value="all">Любой износ</option>
-        <option value="Прямо с завода">Прямо с завода</option>
-        <option value="Немного поношенное">Немного поношенное</option>
-        <option value="После полевых">После полевых</option>
-        <option value="Поношенное">Поношенное</option>
-        <option value="Закаленное в боях">Закаленное в боях</option>
-      </select>
-    </div>
+  <!-- Витрина скинов -->
+  <div class="catalog" id="catalogBox">
+    <div class="status-msg">Загрузка каталога...</div>
   </div>
 
-  <!-- Контейнер карточек -->
-  <div class="grid-container" id="itemsGrid">
-    <div class="status-box">
-      <div class="loader"></div><br />
-      Подключение к серверу...
+  <!-- Нижняя панель создания трейда -->
+  <div class="bottom-bar">
+    <div class="total-info">
+      <span class="total-count" id="lblCount">Выбрано: 0</span>
+      <span class="total-sum" id="lblSum">0.00 ₽</span>
     </div>
-  </div>
-
-  <!-- Нижняя панель действий -->
-  <div class="action-bar">
-    <div class="summary-info">
-      <span class="summary-count" id="selectedCount">Выбрано: 0</span>
-      <span class="summary-total" id="selectedTotal">0.00 ₽</span>
-    </div>
-    <button class="action-btn" id="submitBtn" disabled onclick="submitTradeAction()">Создать обмен</button>
+    <button class="trade-btn" id="btnSubmit" disabled onclick="sendTradeRequest()">Передать боту</button>
   </div>
 
   <script>
@@ -331,200 +197,141 @@
       tg.ready();
     }
 
-    // Твой рабочий туннель localtunnel
+    // Актуальный адрес бэкенда
     const BASE_URL = "https://dull-geckos-do.loca.lt/";
+    const telegramId = tg?.initDataUnsafe?.user?.id || 676723587;
 
-    // Получение Telegram ID пользователя
-    const currentTgId = tg?.initDataUnsafe?.user?.id || 676723587;
-
-    let currentTab = "bot";
+    let activeTab = "bot";
     let botItems = [];
     let userItems = [];
-    let selectedItemIds = new Set();
-    let isUserInvLoading = false;
+    let selectedIds = new Set();
+    let isUserLoading = false;
 
-    // Вспомогательное извлечение качества для предметов пользователя
-    function extractWear(name) {
-      const match = name.match(/\(([^)]+)\)/);
-      if (!match) return "";
-      const w = match[1];
-      if (w.includes("Factory New")) return "Прямо с завода";
-      if (w.includes("Minimal Wear")) return "Немного поношенное";
-      if (w.includes("Field-Tested")) return "После полевых";
-      if (w.includes("Well-Worn")) return "Поношенное";
-      if (w.includes("Battle-Scarred")) return "Закаленное в боях";
-      return w;
-    }
-
-    // Переключение табов
-    function switchTab(tab) {
-      if (currentTab === tab) return;
-      currentTab = tab;
-      selectedItemIds.clear();
-      updateSummary();
+    // Смена вкладки
+    function changeTab(tab) {
+      if (activeTab === tab) return;
+      activeTab = tab;
+      selectedIds.clear();
+      updateBottomBar();
 
       document.getElementById("tabBot").classList.toggle("active", tab === "bot");
       document.getElementById("tabUser").classList.toggle("active", tab === "user");
 
       if (tab === "bot") {
-        if (botItems.length === 0) fetchBotItems();
-        else renderItems(filterItems(botItems));
+        if (botItems.length === 0) loadBotCatalog();
+        else renderCatalog(botItems);
       } else {
-        if (userItems.length === 0) fetchUserItems();
-        else renderItems(filterItems(userItems));
+        if (userItems.length === 0) loadUserCatalog();
+        else renderCatalog(userItems);
       }
     }
 
-    // Загрузка скинов магазина бота
-    async function fetchBotItems() {
-      const grid = document.getElementById("itemsGrid");
-      grid.innerHTML = `<div class="status-box"><div class="loader"></div><br/>Загрузка каталога бота...</div>`;
+    // Загрузка скинов бота
+    async function loadBotCatalog() {
+      const box = document.getElementById("catalogBox");
+      box.innerHTML = `<div class="status-msg">Загрузка предметов бота...</div>`;
 
       try {
         const res = await fetch(`${BASE_URL}/api/items`, {
           headers: { "bypass-tunnel-reminder": "true" }
         });
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        if (!res.ok) throw new Error("Ошибка соединения с сервером");
         const data = await res.json();
         botItems = data.items || [];
-        renderItems(filterItems(botItems));
+        renderCatalog(botItems);
       } catch (err) {
-        grid.innerHTML = `<div class="status-box">Не удалось загрузить витрину бота.<br/>Проверьте работу туннеля.</div>`;
+        box.innerHTML = `<div class="status-msg">${err.message}</div>`;
       }
     }
 
-    // Загрузка инвентаря пользователя с защитой от спама
-    async function fetchUserItems() {
-      if (isUserInvLoading) return;
-      isUserInvLoading = true;
+    // Загрузка инвентаря пользователя
+    async function loadUserCatalog() {
+      if (isUserLoading) return;
+      isUserLoading = true;
 
-      const grid = document.getElementById("itemsGrid");
-      grid.innerHTML = `<div class="status-box"><div class="loader"></div><br/>Синхронизация инвентаря со Steam...</div>`;
+      const box = document.getElementById("catalogBox");
+      box.innerHTML = `<div class="status-msg">Синхронизация инвентаря Steam...</div>`;
 
       try {
-        const res = await fetch(`${BASE_URL}/api/user-items?telegram_id=${currentTgId}`, {
+        const res = await fetch(`${BASE_URL}/api/user-items?telegram_id=${telegramId}`, {
           headers: { "bypass-tunnel-reminder": "true" }
         });
         const data = await res.json();
+        if (!res.ok) throw new Error(data.detail || "Не удалось загрузить инвентарь");
 
-        if (!res.ok) {
-          throw new Error(data.detail || `Ошибка ${res.status}`);
-        }
-
-        userItems = (data.items || []).map(item => ({
-          ...item,
-          wear: item.wear || extractWear(item.name),
-          float_val: item.float_val || ""
-        }));
-
-        renderItems(filterItems(userItems));
+        userItems = data.items || [];
+        renderCatalog(userItems);
       } catch (err) {
-        grid.innerHTML = `<div class="status-box">${err.message}</div>`;
+        box.innerHTML = `<div class="status-msg">${err.message}</div>`;
       } finally {
-        isUserInvLoading = false;
+        isUserLoading = false;
       }
     }
 
-    // Фильтрация
-    function filterItems(itemsList) {
-      const query = document.getElementById("searchInput").value.toLowerCase().trim();
-      const typeFilter = document.getElementById("typeFilter").value;
-      const wearFilter = document.getElementById("wearFilter").value;
+    // Отрисовка карточек
+    function renderCatalog(items) {
+      const box = document.getElementById("catalogBox");
+      box.innerHTML = "";
 
-      return itemsList.filter(item => {
-        const name = (item.name || "").toLowerCase();
-
-        if (query && !name.includes(query)) return false;
-
-        if (wearFilter !== "all") {
-          if (!item.wear || !item.wear.includes(wearFilter)) return false;
-        }
-
-        if (typeFilter === "knife" && !name.includes("нож") && !name.includes("knife") && !name.includes("★")) return false;
-        if (typeFilter === "rifle" && !name.includes("ak-47") && !name.includes("m4a1") && !name.includes("m4a4") && !name.includes("awp")) return false;
-        if (typeFilter === "pistol" && !name.includes("usp") && !name.includes("glock") && !name.includes("desert eagle") && !name.includes("cz75")) return false;
-        if (typeFilter === "other" && (name.includes("нож") || name.includes("ak-47") || name.includes("m4") || name.includes("awp") || name.includes("usp") || name.includes("glock"))) return false;
-
-        return true;
-      });
-    }
-
-    function handleFilterChange() {
-      const source = currentTab === "bot" ? botItems : userItems;
-      renderItems(filterItems(source));
-    }
-
-    // Отрисовка списка предметов
-    function renderItems(items) {
-      const grid = document.getElementById("itemsGrid");
-      grid.innerHTML = "";
-
-      if (items.length === 0) {
-        grid.innerHTML = `<div class="status-box">Предметы не найдены</div>`;
+      if (!items || items.length === 0) {
+        box.innerHTML = `<div class="status-msg">Инвентарь пуст</div>`;
         return;
       }
 
       items.forEach(item => {
-        const isSelected = selectedItemIds.has(item.id);
+        const isSelected = selectedIds.has(item.id);
         const card = document.createElement("div");
-        card.className = `item-card ${isSelected ? "selected" : ""}`;
-        card.onclick = () => toggleSelectItem(item.id);
-
-        const wearBadge = item.wear ? `<span class="badge-wear">${item.wear}</span>` : "";
-        const floatBadge = item.float_val ? `<span class="badge-float">Float: ${item.float_val}</span>` : "";
+        card.className = `card ${isSelected ? "selected" : ""}`;
+        card.onclick = () => selectItem(item.id);
 
         card.innerHTML = `
-          <div class="item-img-wrap">
-            <img class="item-img" src="${item.image}" alt="${item.name}" loading="lazy" />
+          <div class="img-box">
+            <img src="${item.image}" alt="${item.name}" loading="lazy" />
           </div>
           <div class="item-name">${item.name}</div>
-          <div class="meta-tags">
-            ${wearBadge}
-            ${floatBadge}
-          </div>
-          <div class="item-price">${item.price.toFixed(2)} ₽</div>
+          <div class="price">${Number(item.price).toFixed(2)} ₽</div>
         `;
-        grid.appendChild(card);
+        box.appendChild(card);
       });
     }
 
-    // Выбор предметов
-    function toggleSelectItem(id) {
-      if (selectedItemIds.has(id)) {
-        selectedItemIds.delete(id);
+    // Выбор предмета
+    function selectItem(id) {
+      if (selectedIds.has(id)) {
+        selectedIds.delete(id);
       } else {
-        selectedItemIds.add(id);
+        selectedIds.add(id);
       }
-      handleFilterChange();
-      updateSummary();
+      const list = activeTab === "bot" ? botItems : userItems;
+      renderCatalog(list);
+      updateBottomBar();
     }
 
     // Обновление нижней панели
-    function updateSummary() {
-      const source = currentTab === "bot" ? botItems : userItems;
-      const selected = source.filter(i => selectedItemIds.has(i.id));
+    function updateBottomBar() {
+      const list = activeTab === "bot" ? botItems : userItems;
+      const chosen = list.filter(i => selectedIds.has(i.id));
 
-      const count = selected.length;
-      const total = selected.reduce((sum, i) => sum + Number(i.price || 0), 0);
+      const count = chosen.length;
+      const sum = chosen.reduce((acc, i) => acc + Number(i.price || 0), 0);
 
-      document.getElementById("selectedCount").textContent = `Выбрано: ${count}`;
-      document.getElementById("selectedTotal").textContent = `${total.toFixed(2)} ₽`;
+      document.getElementById("lblCount").textContent = `Выбрано: ${count}`;
+      document.getElementById("lblSum").textContent = `${sum.toFixed(2)} ₽`;
 
-      const submitBtn = document.getElementById("submitBtn");
-      submitBtn.disabled = count === 0;
-      submitBtn.textContent = currentTab === "bot" ? "Купить у бота" : "Передать боту";
+      const btn = document.getElementById("btnSubmit");
+      btn.disabled = count === 0;
+      btn.textContent = activeTab === "bot" ? "Купить у бота" : "Передать боту";
     }
 
-    // Отправка заявки в Telegram-бот
-    function submitTradeAction() {
-      const source = currentTab === "bot" ? botItems : userItems;
-      const selected = source.filter(i => selectedItemIds.has(i.id));
-
-      if (selected.length === 0) return;
+    // Отправка в бот
+    function sendTradeRequest() {
+      const list = activeTab === "bot" ? botItems : userItems;
+      const chosen = list.filter(i => selectedIds.has(i.id));
+      if (chosen.length === 0) return;
 
       const payload = {
-        tab: currentTab,
-        items: selected.map(i => ({
+        tab: activeTab,
+        items: chosen.map(i => ({
           asset_id: i.id,
           name: i.name,
           price_rub: i.price
@@ -534,12 +341,12 @@
       if (tg && tg.sendData) {
         tg.sendData(JSON.stringify(payload));
       } else {
-        alert(`Данные для отправки:\n${JSON.stringify(payload, null, 2)}`);
+        alert(JSON.stringify(payload, null, 2));
       }
     }
 
-    // Первый запуск
-    fetchBotItems();
+    // Старт
+    loadBotCatalog();
   </script>
 </body>
 </html>
