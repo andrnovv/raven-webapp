@@ -34,7 +34,7 @@
       padding-bottom: 95px;
     }
 
-    /* Header */
+    /* Верхний блок профиля и статистики */
     .top-bar {
       display: flex;
       justify-content: space-between;
@@ -91,7 +91,7 @@
       object-fit: cover;
     }
 
-    /* Tabs */
+    /* Навигация по вкладкам */
     .tabs-nav {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -120,7 +120,7 @@
       color: var(--text-white);
     }
 
-    /* Controls */
+    /* Панель управления */
     .controls-row {
       display: flex;
       justify-content: space-between;
@@ -129,7 +129,7 @@
       margin-bottom: 14px;
     }
 
-    .btn-sort {
+    .btn-sort, .btn-filter {
       background: var(--card-bg);
       border: 1px solid var(--border);
       color: var(--text-white);
@@ -140,19 +140,6 @@
       display: flex;
       align-items: center;
       gap: 6px;
-    }
-
-    .btn-filter {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      color: var(--text-white);
-      font-size: 12px;
-      padding: 7px 12px;
-      border-radius: 8px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 5px;
     }
 
     .filter-panel {
@@ -180,7 +167,7 @@
       outline: none;
     }
 
-    /* Grid */
+    /* Сетка карточек */
     .items-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -264,7 +251,7 @@
       overflow: hidden;
     }
 
-    /* Bottom Action Bar */
+    /* Нижняя плашка действий */
     .bottom-bar {
       position: fixed;
       bottom: 0;
@@ -309,7 +296,7 @@
 </head>
 <body>
 
-  <!-- Header -->
+  <!-- Top Bar -->
   <div class="top-bar">
     <div class="stats-container">
       <div class="stat-badge">
@@ -324,13 +311,13 @@
     <div class="avatar-wrapper" id="userAvatar">U</div>
   </div>
 
-  <!-- Tabs -->
+  <!-- Tabs Navigation -->
   <div class="tabs-nav">
     <button class="tab-btn" id="tabUser" onclick="switchTab('user')">Мой инвентарь</button>
     <button class="tab-btn active" id="tabBot" onclick="switchTab('bot')">Магазин бота</button>
   </div>
 
-  <!-- Controls -->
+  <!-- Filters & Sort Controls -->
   <div class="controls-row">
     <button class="btn-sort" id="sortBtn" onclick="toggleSort()">
       <span id="sortLabel">По умолчанию</span>
@@ -342,7 +329,7 @@
     </button>
   </div>
 
-  <!-- Dropdown Filters -->
+  <!-- Filter Dropdowns -->
   <div class="filter-panel" id="filterPanel">
     <select class="filter-select" id="weaponFilter" onchange="applyFilters()">
       <option value="all">Все типы</option>
@@ -367,14 +354,14 @@
     </select>
   </div>
 
-  <!-- Grid -->
+  <!-- Items Grid -->
   <div class="items-grid" id="itemsGrid">
     <div class="status-box">Загрузка скинов...</div>
   </div>
 
-  <!-- Submit Button -->
+  <!-- Action Bar -->
   <div class="bottom-bar">
-    <button class="btn-trade" id="tradeBtn" onclick="submitTrade()">Обменять</button>
+    <button class="btn-trade" id="tradeBtn" onclick="submitTrade()">Купить у бота</button>
   </div>
 
   <script>
@@ -384,11 +371,11 @@
       tg.expand();
     }
 
-    // Твой текущий URL туннеля (FastAPI)
-    const BASE_URL = "https://large-jeans-lose.loca.lt/";
+    // Актуальный адрес туннеля localtunnel
+    const BASE_URL = "https://wet-sites-lead.loca.lt";
     const currentTgId = tg?.initDataUnsafe?.user?.id || 676723587;
 
-    // Аватарка Telegram
+    // Отображение аватара пользователя
     const tgUser = tg?.initDataUnsafe?.user;
     const avatarWrapper = document.getElementById("userAvatar");
     if (tgUser && tgUser.photo_url) {
@@ -406,7 +393,7 @@
     let isUserLoading = false;
 
     function extractWear(name) {
-      const n = name.toLowerCase();
+      const n = (name || "").toLowerCase();
       if (n.includes("factory new") || n.includes("прямо с завода")) return "FN";
       if (n.includes("minimal wear") || n.includes("немного поношенное")) return "MW";
       if (n.includes("field-tested") || n.includes("после полевых")) return "FT";
@@ -417,7 +404,7 @@
 
     async function loadBotCatalog() {
       const grid = document.getElementById("itemsGrid");
-      grid.innerHTML = `<div class="status-box">Загрузка витрины бота...</div>`;
+      grid.innerHTML = `<div class="status-box">Загрузка каталога бота...</div>`;
 
       try {
         const res = await fetch(`${BASE_URL}/api/items`, {
@@ -434,7 +421,7 @@
         
         applyFilters();
       } catch (e) {
-        grid.innerHTML = `<div class="status-box">Ошибка подключения к серверу бота.<br>Проверь туннель и api_server.py</div>`;
+        grid.innerHTML = `<div class="status-box">Ошибка загрузки каталога.<br>Проверьте туннель localtunnel.</div>`;
       }
     }
 
@@ -576,10 +563,12 @@
     }
 
     function updateSummary() {
-      const sourceList = activeTab === "bot" ? botItems : userItems;
-      let invTotal = displayedItems.reduce((acc, i) => acc + Number(i.price || 0), 0);
-      document.getElementById("totalInventorySum").textContent = `${Math.round(invTotal)} ₽`;
+      // Сумма в плашке «Инвентарь» всегда отражает баланс скинов пользователя
+      let userTotal = userItems.reduce((acc, i) => acc + Number(i.price || 0), 0);
+      document.getElementById("totalInventorySum").textContent = `${Math.round(userTotal)} ₽`;
 
+      // Считаем выбранные предметы из текущей активной вкладки
+      const sourceList = activeTab === "bot" ? botItems : userItems;
       let selTotal = 0;
       sourceList.forEach(i => {
         if (selectedIds.has(i.id)) selTotal += Number(i.price || 0);
@@ -623,8 +612,25 @@
       }
     }
 
-    // Первичный запуск
+    // Загрузка витрины бота и тихая фоновая предзагрузка инвентаря пользователя
     loadBotCatalog();
+    if (userItems.length === 0) {
+      fetch(`${BASE_URL}/api/user-items?telegram_id=${currentTgId}`, {
+        headers: { "bypass-tunnel-reminder": "true" }
+      })
+      .then(r => r.json())
+      .then(d => {
+        if (d.items) {
+          userItems = d.items.map(i => ({
+            ...i,
+            wear: i.wear ? extractWear(i.wear) : extractWear(i.name),
+            float_val: i.float_val || ""
+          }));
+          updateSummary();
+        }
+      })
+      .catch(() => {});
+    }
   </script>
 </body>
 </html>
