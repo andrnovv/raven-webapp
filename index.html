@@ -3,19 +3,22 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>RavenMarket</title>
+  <title>Raven Market | CS2 Trade</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
     :root {
-      --bg: #0f141c;
-      --card-bg: #18202c;
-      --card-selected: #202d40;
-      --border: #283548;
-      --accent: #2563eb;
-      --blue-soft: #38bdf8;
-      --text-white: #ffffff;
-      --text-gray: #94a3b8;
-      --badge-bg: #222f42;
+      --bg-main: #0f141c;
+      --bg-card: #18202c;
+      --bg-hover: #1f2a3a;
+      --border-color: #273447;
+      --accent-blue: #2563eb;
+      --accent-hover: #1d4ed8;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --badge-bg: #1e293b;
+      --badge-text: #38bdf8;
+      --price-color: #38bdf8;
+      --danger: #ef4444;
     }
 
     * {
@@ -23,155 +26,98 @@
       margin: 0;
       padding: 0;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      user-select: none;
+      -webkit-tap-highlight-color: transparent;
     }
 
     body {
-      background-color: var(--bg);
-      color: var(--text-white);
-      padding: 14px;
-      padding-bottom: 95px;
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      min-height: 100vh;
+      padding-bottom: 90px;
     }
 
-    .top-bar {
+    /* Навигация по табам */
+    .tabs-header {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 14px;
-    }
-
-    .stats-container {
-      display: flex;
-      gap: 8px;
-    }
-
-    .stat-badge {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 6px 10px;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .stat-label {
-      font-size: 10px;
-      color: var(--text-gray);
-      text-transform: uppercase;
-    }
-
-    .stat-val {
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--text-white);
-      margin-top: 1px;
-    }
-
-    .avatar-wrapper {
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      border: 2px solid var(--accent);
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: var(--card-bg);
-      font-weight: 700;
-      color: var(--blue-soft);
-      font-size: 16px;
-    }
-
-    .avatar-img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .tabs-nav {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 6px;
-      background: var(--card-bg);
-      padding: 4px;
-      border-radius: 12px;
-      border: 1px solid var(--border);
-      margin-bottom: 12px;
+      background-color: #131b26;
+      border-bottom: 1px solid var(--border-color);
+      position: sticky;
+      top: 0;
+      z-index: 20;
     }
 
     .tab-btn {
-      background: none;
+      flex: 1;
+      padding: 14px 10px;
+      background: transparent;
       border: none;
-      color: var(--text-gray);
-      font-size: 13px;
+      color: var(--text-muted);
+      font-size: 14px;
       font-weight: 600;
-      padding: 8px;
-      border-radius: 8px;
       cursor: pointer;
-      transition: 0.2s ease;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s ease;
     }
 
     .tab-btn.active {
-      background: var(--accent);
-      color: var(--text-white);
+      color: #fff;
+      border-bottom-color: var(--accent-blue);
+      background-color: rgba(37, 99, 235, 0.05);
     }
 
-    .controls-row {
+    /* Блок поиска и фильтров */
+    .toolbar {
+      padding: 12px 14px;
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 14px;
-    }
-
-    .btn-sort, .btn-filter {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      color: var(--text-white);
-      font-size: 12px;
-      padding: 7px 12px;
-      border-radius: 8px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .filter-panel {
-      display: none;
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 10px;
-      margin-bottom: 12px;
-      gap: 8px;
       flex-direction: column;
+      gap: 10px;
+      background-color: #131b26;
+      border-bottom: 1px solid var(--border-color);
     }
 
-    .filter-panel.open {
-      display: flex;
-    }
-
-    .filter-select {
-      background: var(--bg);
-      border: 1px solid var(--border);
-      color: var(--text-white);
-      padding: 6px 10px;
-      border-radius: 6px;
-      font-size: 12px;
+    .search-input {
+      width: 100%;
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 10px 12px;
+      color: #fff;
+      font-size: 14px;
       outline: none;
     }
 
-    .items-grid {
+    .search-input:focus {
+      border-color: var(--accent-blue);
+    }
+
+    .filters-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .filter-select {
+      flex: 1;
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 8px 10px;
+      color: var(--text-muted);
+      font-size: 13px;
+      outline: none;
+    }
+
+    /* Сетка предметов 2 в ряд */
+    .grid-container {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: repeat(2, 1fr);
       gap: 10px;
+      padding: 14px;
     }
 
     .item-card {
-      background: var(--card-bg);
-      border: 1.5px solid var(--border);
-      border-radius: 12px;
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
       padding: 12px 10px;
       display: flex;
       flex-direction: column;
@@ -179,361 +125,421 @@
       text-align: center;
       position: relative;
       cursor: pointer;
-      transition: all 0.15s ease;
+      user-select: none;
+      transition: transform 0.15s ease, border-color 0.15s ease;
+    }
+
+    .item-card:active {
+      transform: scale(0.98);
     }
 
     .item-card.selected {
-      background: var(--card-selected);
-      border-color: var(--blue-soft);
-      box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
+      border-color: var(--accent-blue);
+      background-color: rgba(37, 99, 235, 0.08);
+      box-shadow: 0 0 0 1px var(--accent-blue);
     }
 
-    .card-top {
+    .item-img-wrap {
       width: 100%;
+      height: 95px;
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      margin-bottom: 6px;
-    }
-
-    .item-price {
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--blue-soft);
-    }
-
-    .item-wear {
-      font-size: 9px;
-      padding: 2px 5px;
-      background: var(--badge-bg);
-      border-radius: 4px;
-      color: var(--text-gray);
-      font-weight: 600;
+      justify-content: center;
+      margin-bottom: 8px;
     }
 
     .item-img {
-      width: 95px;
-      height: 70px;
+      max-width: 95%;
+      max-height: 95px;
       object-fit: contain;
-      margin: 6px 0;
+      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5));
     }
 
-    .item-title {
-      font-size: 11px;
-      font-weight: 500;
-      color: var(--text-white);
-      line-height: 1.25;
-      height: 28px;
+    .item-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: #fff;
+      line-height: 1.3;
+      margin-bottom: 6px;
+      height: 34px;
+      overflow: hidden;
       display: -webkit-box;
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
-      overflow: hidden;
     }
 
-    .bottom-bar {
+    .meta-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      justify-content: center;
+      margin-bottom: 8px;
+      width: 100%;
+    }
+
+    .badge-wear {
+      font-size: 10px;
+      padding: 2px 6px;
+      background-color: var(--badge-bg);
+      color: var(--badge-text);
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+
+    .badge-float {
+      font-size: 10px;
+      padding: 2px 6px;
+      background-color: #243042;
+      color: #cbd5e1;
+      border-radius: 4px;
+      font-family: monospace;
+    }
+
+    .item-price {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--price-color);
+      margin-top: auto;
+    }
+
+    /* Статусные сообщения */
+    .status-box {
+      grid-column: span 2;
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--text-muted);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .loader {
+      display: inline-block;
+      width: 24px;
+      height: 24px;
+      border: 3px solid rgba(255,255,255,0.1);
+      border-radius: 50%;
+      border-top-color: var(--accent-blue);
+      animation: spin 0.8s linear infinite;
+      margin-bottom: 12px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Нижняя плашка действий */
+    .action-bar {
       position: fixed;
       bottom: 0;
       left: 0;
       right: 0;
-      padding: 14px;
-      background: rgba(15, 20, 28, 0.95);
-      border-top: 1px solid var(--border);
-      z-index: 100;
+      background-color: #131b26;
+      border-top: 1px solid var(--border-color);
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 30;
     }
 
-    .btn-trade {
-      width: 100%;
-      background: var(--accent);
-      border: none;
-      color: var(--text-white);
-      font-size: 15px;
+    .summary-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .summary-count {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .summary-total {
+      font-size: 16px;
       font-weight: 700;
-      padding: 13px;
-      border-radius: 10px;
+      color: #fff;
+    }
+
+    .action-btn {
+      background-color: var(--accent-blue);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 20px;
+      font-size: 14px;
+      font-weight: 600;
       cursor: pointer;
-      opacity: 0.4;
-      pointer-events: none;
-      transition: 0.2s ease;
+      transition: background 0.2s ease;
     }
 
-    .btn-trade.active {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    .status-box {
-      grid-column: span 2;
-      text-align: center;
-      padding: 40px 10px;
-      color: var(--text-gray);
-      font-size: 13px;
+    .action-btn:disabled {
+      background-color: #273447;
+      color: #64748b;
+      cursor: not-allowed;
     }
   </style>
 </head>
 <body>
 
-  <div class="top-bar">
-    <div class="stats-container">
-      <div class="stat-badge">
-        <span class="stat-label">Инвентарь</span>
-        <span class="stat-val" id="totalInventorySum">0 ₽</span>
-      </div>
-      <div class="stat-badge">
-        <span class="stat-label">Выбрано</span>
-        <span class="stat-val" id="selectedSum">0 ₽</span>
-      </div>
-    </div>
-    <div class="avatar-wrapper" id="userAvatar">U</div>
-  </div>
-
-  <div class="tabs-nav">
+  <!-- Навигация -->
+  <div class="tabs-header">
+    <button class="tab-btn active" id="tabBot" onclick="switchTab('bot')">Скины бота</button>
     <button class="tab-btn" id="tabUser" onclick="switchTab('user')">Мой инвентарь</button>
-    <button class="tab-btn active" id="tabBot" onclick="switchTab('bot')">Магазин бота</button>
   </div>
 
-  <div class="controls-row">
-    <button class="btn-sort" id="sortBtn" onclick="toggleSort()">
-      <span id="sortLabel">По умолчанию</span>
-      <span id="sortArrow">⇅</span>
-    </button>
-    <button class="btn-filter" onclick="toggleFilterPanel()">
-      <span>Фильтры</span>
-      <span>⚙️</span>
-    </button>
+  <!-- Поиск и фильтрация -->
+  <div class="toolbar">
+    <input type="text" id="searchInput" class="search-input" placeholder="Поиск по названию..." oninput="handleFilterChange()" />
+    <div class="filters-row">
+      <select id="typeFilter" class="filter-select" onchange="handleFilterChange()">
+        <option value="all">Все типы</option>
+        <option value="knife">Ножи</option>
+        <option value="rifle">Винтовки (AK, M4, AWP)</option>
+        <option value="pistol">Пистолеты</option>
+        <option value="other">Прочее / Кейсы</option>
+      </select>
+      <select id="wearFilter" class="filter-select" onchange="handleFilterChange()">
+        <option value="all">Любой износ</option>
+        <option value="Прямо с завода">Прямо с завода</option>
+        <option value="Немного поношенное">Немного поношенное</option>
+        <option value="После полевых">После полевых</option>
+        <option value="Поношенное">Поношенное</option>
+        <option value="Закаленное в боях">Закаленное в боях</option>
+      </select>
+    </div>
   </div>
 
-  <div class="filter-panel" id="filterPanel">
-    <select class="filter-select" id="weaponFilter" onchange="applyFilters()">
-      <option value="all">Все оружия</option>
-      <option value="AK-47">AK-47</option>
-      <option value="AWP">AWP</option>
-      <option value="M4A1-S">M4A1-S</option>
-      <option value="Desert Eagle">Desert Eagle</option>
-      <option value="USP-S">USP-S</option>
-      <option value="Glock-18">Glock-18</option>
-      <option value="Нож">Ножи</option>
-      <option value="Кейс">Кейсы</option>
-    </select>
-    <select class="filter-select" id="wearFilter" onchange="applyFilters()">
-      <option value="all">Любой износ</option>
-      <option value="FN">Factory New</option>
-      <option value="MW">Minimal Wear</option>
-      <option value="FT">Field-Tested</option>
-      <option value="WW">Well-Worn</option>
-      <option value="BS">Battle-Scarred</option>
-    </select>
+  <!-- Контейнер карточек -->
+  <div class="grid-container" id="itemsGrid">
+    <div class="status-box">
+      <div class="loader"></div><br />
+      Подключение к серверу...
+    </div>
   </div>
 
-  <div class="items-grid" id="itemsGrid">
-    <div class="status-box">Загрузка скинов...</div>
-  </div>
-
-  <div class="bottom-bar">
-    <button class="btn-trade" id="tradeBtn" onclick="submitTrade()">Обменять</button>
+  <!-- Нижняя панель действий -->
+  <div class="action-bar">
+    <div class="summary-info">
+      <span class="summary-count" id="selectedCount">Выбрано: 0</span>
+      <span class="summary-total" id="selectedTotal">0.00 ₽</span>
+    </div>
+    <button class="action-btn" id="submitBtn" disabled onclick="submitTradeAction()">Создать обмен</button>
   </div>
 
   <script>
     const tg = window.Telegram?.WebApp;
     if (tg) {
-      tg.ready();
       tg.expand();
+      tg.ready();
     }
 
-    const tgUser = tg?.initDataUnsafe?.user;
-    const currentTgId = tgUser ? tgUser.id : 676723587; // fallback на твой Telegram ID для тестов
-
-    const avatarWrapper = document.getElementById("userAvatar");
-    if (tgUser && tgUser.photo_url) {
-      avatarWrapper.innerHTML = `<img class="avatar-img" src="${tgUser.photo_url}" alt="User">`;
-    } else if (tgUser && tgUser.first_name) {
-      avatarWrapper.textContent = tgUser.first_name[0].toUpperCase();
-    }
-
-    // Твой текущий URL туннеля
+    // Твой рабочий туннель localtunnel
     const BASE_URL = "https://heavy-eyes-move.loca.lt";
 
-    let activeTab = 'bot';
+    // Получение Telegram ID пользователя
+    const currentTgId = tg?.initDataUnsafe?.user?.id || 676723587;
+
+    let currentTab = "bot";
     let botItems = [];
     let userItems = [];
-    let displayedItems = [];
-    let selectedIds = new Set();
-    let sortState = 0;
+    let selectedItemIds = new Set();
+    let isUserInvLoading = false;
 
+    // Вспомогательное извлечение качества для предметов пользователя
     function extractWear(name) {
-      if (name.includes("Factory New")) return "FN";
-      if (name.includes("Minimal Wear")) return "MW";
-      if (name.includes("Field-Tested")) return "FT";
-      if (name.includes("Well-Worn")) return "WW";
-      if (name.includes("Battle-Scarred")) return "BS";
-      return "";
+      const match = name.match(/\(([^)]+)\)/);
+      if (!match) return "";
+      const w = match[1];
+      if (w.includes("Factory New")) return "Прямо с завода";
+      if (w.includes("Minimal Wear")) return "Немного поношенное";
+      if (w.includes("Field-Tested")) return "После полевых";
+      if (w.includes("Well-Worn")) return "Поношенное";
+      if (w.includes("Battle-Scarred")) return "Закаленное в боях";
+      return w;
     }
 
-    async function loadCatalog() {
+    // Переключение табов
+    function switchTab(tab) {
+      if (currentTab === tab) return;
+      currentTab = tab;
+      selectedItemIds.clear();
+      updateSummary();
+
+      document.getElementById("tabBot").classList.toggle("active", tab === "bot");
+      document.getElementById("tabUser").classList.toggle("active", tab === "user");
+
+      if (tab === "bot") {
+        if (botItems.length === 0) fetchBotItems();
+        else renderItems(filterItems(botItems));
+      } else {
+        if (userItems.length === 0) fetchUserItems();
+        else renderItems(filterItems(userItems));
+      }
+    }
+
+    // Загрузка скинов магазина бота
+    async function fetchBotItems() {
+      const grid = document.getElementById("itemsGrid");
+      grid.innerHTML = `<div class="status-box"><div class="loader"></div><br/>Загрузка каталога бота...</div>`;
+
       try {
         const res = await fetch(`${BASE_URL}/api/items`, {
           headers: { "bypass-tunnel-reminder": "true" }
         });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const data = await res.json();
-        botItems = (data.items || []).map(i => ({ ...i, wear: extractWear(i.name) }));
-        applyFilters();
-      } catch (e) {
-        document.getElementById("itemsGrid").innerHTML = 
-          `<div class="status-box">Ошибка загрузки магазина бота.</div>`;
+        botItems = data.items || [];
+        renderItems(filterItems(botItems));
+      } catch (err) {
+        grid.innerHTML = `<div class="status-box">Не удалось загрузить витрину бота.<br/>Проверьте работу туннеля.</div>`;
       }
     }
 
-    async function loadUserInventory() {
-      document.getElementById("itemsGrid").innerHTML = 
-        `<div class="status-box">Загрузка вашего инвентаря из Steam...</div>`;
+    // Загрузка инвентаря пользователя с защитой от спама
+    async function fetchUserItems() {
+      if (isUserInvLoading) return;
+      isUserInvLoading = true;
+
+      const grid = document.getElementById("itemsGrid");
+      grid.innerHTML = `<div class="status-box"><div class="loader"></div><br/>Синхронизация инвентаря со Steam...</div>`;
+
       try {
         const res = await fetch(`${BASE_URL}/api/user-items?telegram_id=${currentTgId}`, {
           headers: { "bypass-tunnel-reminder": "true" }
         });
-        if (!res.ok) {
-          const err = await res.json();
-          throw new Error(err.detail || "Ошибка");
-        }
         const data = await res.json();
-        userItems = (data.items || []).map(i => ({ ...i, wear: extractWear(i.name) }));
-        applyFilters();
-      } catch (e) {
-        document.getElementById("itemsGrid").innerHTML = 
-          `<div class="status-box">${e.message}</div>`;
+
+        if (!res.ok) {
+          throw new Error(data.detail || `Ошибка ${res.status}`);
+        }
+
+        userItems = (data.items || []).map(item => ({
+          ...item,
+          wear: item.wear || extractWear(item.name),
+          float_val: item.float_val || ""
+        }));
+
+        renderItems(filterItems(userItems));
+      } catch (err) {
+        grid.innerHTML = `<div class="status-box">${err.message}</div>`;
+      } finally {
+        isUserInvLoading = false;
       }
     }
 
-    function switchTab(tab) {
-      activeTab = tab;
-      document.getElementById("tabUser").classList.toggle("active", tab === 'user');
-      document.getElementById("tabBot").classList.toggle("active", tab === 'bot');
-      selectedIds.clear();
+    // Фильтрация
+    function filterItems(itemsList) {
+      const query = document.getElementById("searchInput").value.toLowerCase().trim();
+      const typeFilter = document.getElementById("typeFilter").value;
+      const wearFilter = document.getElementById("wearFilter").value;
 
-      if (tab === 'user' && userItems.length === 0) {
-        loadUserInventory();
-      } else {
-        applyFilters();
-      }
-    }
+      return itemsList.filter(item => {
+        const name = (item.name || "").toLowerCase();
 
-    function toggleFilterPanel() {
-      document.getElementById("filterPanel").classList.toggle("open");
-    }
+        if (query && !name.includes(query)) return false;
 
-    function toggleSort() {
-      sortState = (sortState + 1) % 3;
-      const label = document.getElementById("sortLabel");
-      const arrow = document.getElementById("sortArrow");
+        if (wearFilter !== "all") {
+          if (!item.wear || !item.wear.includes(wearFilter)) return false;
+        }
 
-      if (sortState === 0) {
-        label.textContent = "По умолчанию";
-        arrow.textContent = "⇅";
-      } else if (sortState === 1) {
-        label.textContent = "Цена: дешевле";
-        arrow.textContent = "↑";
-      } else {
-        label.textContent = "Цена: дороже";
-        arrow.textContent = "↓";
-      }
-      applyFilters();
-    }
+        if (typeFilter === "knife" && !name.includes("нож") && !name.includes("knife") && !name.includes("★")) return false;
+        if (typeFilter === "rifle" && !name.includes("ak-47") && !name.includes("m4a1") && !name.includes("m4a4") && !name.includes("awp")) return false;
+        if (typeFilter === "pistol" && !name.includes("usp") && !name.includes("glock") && !name.includes("desert eagle") && !name.includes("cz75")) return false;
+        if (typeFilter === "other" && (name.includes("нож") || name.includes("ak-47") || name.includes("m4") || name.includes("awp") || name.includes("usp") || name.includes("glock"))) return false;
 
-    function applyFilters() {
-      const source = activeTab === 'bot' ? botItems : userItems;
-      const weapon = document.getElementById("weaponFilter").value;
-      const wear = document.getElementById("wearFilter").value;
-
-      displayedItems = source.filter(item => {
-        let matchWeapon = (weapon === 'all') || item.name.includes(weapon);
-        let matchWear = (wear === 'all') || (item.wear === wear);
-        return matchWeapon && matchWear;
+        return true;
       });
-
-      if (sortState === 1) displayedItems.sort((a, b) => a.price - b.price);
-      if (sortState === 2) displayedItems.sort((a, b) => b.price - a.price);
-
-      renderGrid();
-      updateSummary();
     }
 
-    function renderGrid() {
+    function handleFilterChange() {
+      const source = currentTab === "bot" ? botItems : userItems;
+      renderItems(filterItems(source));
+    }
+
+    // Отрисовка списка предметов
+    function renderItems(items) {
       const grid = document.getElementById("itemsGrid");
-      if (displayedItems.length === 0) {
+      grid.innerHTML = "";
+
+      if (items.length === 0) {
         grid.innerHTML = `<div class="status-box">Предметы не найдены</div>`;
         return;
       }
 
-      grid.innerHTML = "";
-      displayedItems.forEach(item => {
-        const isSel = selectedIds.has(item.id);
+      items.forEach(item => {
+        const isSelected = selectedItemIds.has(item.id);
         const card = document.createElement("div");
-        card.className = "item-card" + (isSel ? " selected" : "");
-        card.onclick = () => toggleSelect(item.id);
+        card.className = `item-card ${isSelected ? "selected" : ""}`;
+        card.onclick = () => toggleSelectItem(item.id);
+
+        const wearBadge = item.wear ? `<span class="badge-wear">${item.wear}</span>` : "";
+        const floatBadge = item.float_val ? `<span class="badge-float">Float: ${item.float_val}</span>` : "";
 
         card.innerHTML = `
-          <div class="card-top">
-            <span class="item-price">${Math.round(item.price)} ₽</span>
-            ${item.wear ? `<span class="item-wear">${item.wear}</span>` : ''}
+          <div class="item-img-wrap">
+            <img class="item-img" src="${item.image}" alt="${item.name}" loading="lazy" />
           </div>
-          <img class="item-img" src="${item.image}" alt="${item.name}" loading="lazy">
-          <div class="item-title">${item.name}</div>
+          <div class="item-name">${item.name}</div>
+          <div class="meta-tags">
+            ${wearBadge}
+            ${floatBadge}
+          </div>
+          <div class="item-price">${item.price.toFixed(2)} ₽</div>
         `;
         grid.appendChild(card);
       });
     }
 
-    function toggleSelect(id) {
-      if (selectedIds.has(id)) {
-        selectedIds.delete(id);
+    // Выбор предметов
+    function toggleSelectItem(id) {
+      if (selectedItemIds.has(id)) {
+        selectedItemIds.delete(id);
       } else {
-        selectedIds.add(id);
+        selectedItemIds.add(id);
       }
-      renderGrid();
+      handleFilterChange();
       updateSummary();
     }
 
+    // Обновление нижней панели
     function updateSummary() {
-      const currentList = activeTab === 'bot' ? botItems : userItems;
-      let invTotal = currentList.reduce((acc, i) => acc + Number(i.price), 0);
-      document.getElementById("totalInventorySum").textContent = `${Math.round(invTotal)} ₽`;
+      const source = currentTab === "bot" ? botItems : userItems;
+      const selected = source.filter(i => selectedItemIds.has(i.id));
 
-      let selTotal = 0;
-      currentList.forEach(i => {
-        if (selectedIds.has(i.id)) selTotal += Number(i.price);
-      });
-      document.getElementById("selectedSum").textContent = `${Math.round(selTotal)} ₽`;
+      const count = selected.length;
+      const total = selected.reduce((sum, i) => sum + Number(i.price || 0), 0);
 
-      const btn = document.getElementById("tradeBtn");
-      if (selectedIds.size > 0) {
-        btn.classList.add("active");
-        btn.textContent = `Обменять (${selectedIds.size}) на ${Math.round(selTotal)} ₽`;
-      } else {
-        btn.classList.remove("active");
-        btn.textContent = "Обменять";
-      }
+      document.getElementById("selectedCount").textContent = `Выбрано: ${count}`;
+      document.getElementById("selectedTotal").textContent = `${total.toFixed(2)} ₽`;
+
+      const submitBtn = document.getElementById("submitBtn");
+      submitBtn.disabled = count === 0;
+      submitBtn.textContent = currentTab === "bot" ? "Купить у бота" : "Передать боту";
     }
 
-    function submitTrade() {
-      if (selectedIds.size === 0) return;
-      const currentList = activeTab === 'bot' ? botItems : userItems;
-      const itemsToSend = currentList
-        .filter(i => selectedIds.has(i.id))
-        .map(i => ({ asset_id: i.id, name: i.name, price_rub: i.price }));
+    // Отправка заявки в Telegram-бот
+    function submitTradeAction() {
+      const source = currentTab === "bot" ? botItems : userItems;
+      const selected = source.filter(i => selectedItemIds.has(i.id));
+
+      if (selected.length === 0) return;
 
       const payload = {
-        action: "create_trade",
-        tab: activeTab,
-        items: itemsToSend
+        tab: currentTab,
+        items: selected.map(i => ({
+          asset_id: i.id,
+          name: i.name,
+          price_rub: i.price
+        }))
       };
 
-      if (tg) {
+      if (tg && tg.sendData) {
         tg.sendData(JSON.stringify(payload));
-        tg.close();
       } else {
-        alert("Заказ оформлен:\n" + JSON.stringify(payload, null, 2));
+        alert(`Данные для отправки:\n${JSON.stringify(payload, null, 2)}`);
       }
     }
 
-    loadCatalog();
+    // Первый запуск
+    fetchBotItems();
   </script>
 </body>
 </html>
