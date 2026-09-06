@@ -14,6 +14,8 @@
       --accent: #2563eb;
       --accent-hover: #1d4ed8;
       --blue-soft: #38bdf8;
+      --green: #22c55e;
+      --red: #ef4444;
       --text-white: #ffffff;
       --text-gray: #94a3b8;
       --badge-bg: #222f42;
@@ -30,49 +32,52 @@
     body {
       background-color: var(--bg);
       color: var(--text-white);
-      padding: 14px;
+      padding: 12px;
       padding-bottom: 95px;
     }
 
-    /* Верхний блок профиля и статистики */
     .top-bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
+      gap: 6px;
     }
 
     .stats-container {
       display: flex;
-      gap: 8px;
+      gap: 6px;
+      flex-grow: 1;
     }
 
     .stat-badge {
+      flex: 1;
       background: var(--card-bg);
       border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 6px 10px;
+      border-radius: 8px;
+      padding: 6px 8px;
       display: flex;
       flex-direction: column;
     }
 
     .stat-label {
-      font-size: 10px;
+      font-size: 9px;
       color: var(--text-gray);
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.4px;
     }
 
     .stat-val {
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 700;
       color: var(--text-white);
-      margin-top: 1px;
+      margin-top: 2px;
+      white-space: nowrap;
     }
 
     .avatar-wrapper {
-      width: 44px;
-      height: 44px;
+      width: 40px;
+      height: 40px;
       border-radius: 50%;
       border: 2px solid var(--accent);
       overflow: hidden;
@@ -82,7 +87,8 @@
       background: var(--card-bg);
       font-weight: 700;
       color: var(--blue-soft);
-      font-size: 16px;
+      font-size: 14px;
+      flex-shrink: 0;
     }
 
     .avatar-img {
@@ -91,16 +97,15 @@
       object-fit: cover;
     }
 
-    /* Навигация по вкладкам */
     .tabs-nav {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 6px;
       background: var(--card-bg);
       padding: 4px;
-      border-radius: 12px;
+      border-radius: 10px;
       border: 1px solid var(--border);
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
 
     .tab-btn {
@@ -109,7 +114,7 @@
       color: var(--text-gray);
       font-size: 13px;
       font-weight: 600;
-      padding: 8px;
+      padding: 8px 4px;
       border-radius: 8px;
       cursor: pointer;
       transition: 0.2s ease;
@@ -120,13 +125,12 @@
       color: var(--text-white);
     }
 
-    /* Панель управления */
     .controls-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
       gap: 8px;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
     }
 
     .btn-sort, .btn-filter {
@@ -134,7 +138,7 @@
       border: 1px solid var(--border);
       color: var(--text-white);
       font-size: 12px;
-      padding: 7px 12px;
+      padding: 6px 12px;
       border-radius: 8px;
       cursor: pointer;
       display: flex;
@@ -167,7 +171,6 @@
       outline: none;
     }
 
-    /* Сетка карточек */
     .items-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -178,7 +181,7 @@
       background: var(--card-bg);
       border: 1.5px solid var(--border);
       border-radius: 12px;
-      padding: 12px 10px;
+      padding: 10px 8px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -191,7 +194,7 @@
     .item-card.selected {
       background: var(--card-selected);
       border-color: var(--blue-soft);
-      box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
+      box-shadow: 0 0 8px rgba(56, 189, 248, 0.25);
     }
 
     .card-top {
@@ -199,7 +202,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
     }
 
     .item-price {
@@ -208,56 +211,40 @@
       color: var(--blue-soft);
     }
 
-    .badge-group {
-      display: flex;
-      gap: 4px;
-      align-items: center;
-    }
-
     .item-wear {
       font-size: 9px;
-      padding: 2px 5px;
+      padding: 2px 4px;
       background: var(--badge-bg);
       border-radius: 4px;
       color: var(--text-gray);
       font-weight: 600;
     }
 
-    .item-float {
-      font-size: 8px;
-      padding: 2px 4px;
-      background: #1f2937;
-      border-radius: 4px;
-      color: #93c5fd;
-      font-family: monospace;
-    }
-
     .item-img {
-      width: 95px;
-      height: 70px;
+      width: 90px;
+      height: 65px;
       object-fit: contain;
-      margin: 6px 0;
+      margin: 4px 0;
     }
 
     .item-title {
       font-size: 11px;
       font-weight: 500;
       color: var(--text-white);
-      line-height: 1.25;
-      height: 28px;
+      line-height: 1.2;
+      height: 26px;
       display: -webkit-box;
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
       overflow: hidden;
     }
 
-    /* Нижняя плашка действий */
     .bottom-bar {
       position: fixed;
       bottom: 0;
       left: 0;
       right: 0;
-      padding: 14px;
+      padding: 12px;
       background: rgba(15, 20, 28, 0.95);
       backdrop-filter: blur(8px);
       border-top: 1px solid var(--border);
@@ -269,9 +256,9 @@
       background: var(--accent);
       border: none;
       color: var(--text-white);
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 700;
-      padding: 13px;
+      padding: 14px;
       border-radius: 10px;
       cursor: pointer;
       opacity: 0.4;
@@ -284,10 +271,18 @@
       pointer-events: auto;
     }
 
+    .btn-trade.disabled-funds {
+      background: #374151;
+      color: #9ca3af;
+      cursor: not-allowed;
+      opacity: 0.8;
+      pointer-events: none;
+    }
+
     .status-box {
       grid-column: span 2;
       text-align: center;
-      padding: 40px 10px;
+      padding: 30px 10px;
       color: var(--text-gray);
       font-size: 13px;
       line-height: 1.5;
@@ -300,12 +295,16 @@
   <div class="top-bar">
     <div class="stats-container">
       <div class="stat-badge">
-        <span class="stat-label">Инвентарь</span>
-        <span class="stat-val" id="totalInventorySum">0 ₽</span>
+        <span class="stat-label">Баланс</span>
+        <span class="stat-val" id="profileBalance">0 ₽</span>
       </div>
       <div class="stat-badge">
-        <span class="stat-label">Выбрано</span>
-        <span class="stat-val" id="selectedSum">0 ₽</span>
+        <span class="stat-label">Вы отдаете</span>
+        <span class="stat-val" id="userGiveSum">0 ₽</span>
+      </div>
+      <div class="stat-badge">
+        <span class="stat-label">Вы получаете</span>
+        <span class="stat-val" id="userReceiveSum">0 ₽</span>
       </div>
     </div>
     <div class="avatar-wrapper" id="userAvatar">U</div>
@@ -313,13 +312,13 @@
 
   <!-- Tabs Navigation -->
   <div class="tabs-nav">
-    <button class="tab-btn" id="tabUser" onclick="switchTab('user')">Мой инвентарь</button>
-    <button class="tab-btn active" id="tabBot" onclick="switchTab('bot')">Магазин бота</button>
+    <button class="tab-btn active" id="tabUser" onclick="switchTab('user')">Мой инвентарь (<span id="userCount">0</span>)</button>
+    <button class="tab-btn" id="tabBot" onclick="switchTab('bot')">Магазин бота (<span id="botCount">0</span>)</button>
   </div>
 
-  <!-- Filters & Sort Controls -->
+  <!-- Controls -->
   <div class="controls-row">
-    <button class="btn-sort" id="sortBtn" onclick="toggleSort()">
+    <button class="btn-sort" onclick="toggleSort()">
       <span id="sortLabel">По умолчанию</span>
       <span id="sortArrow">⇅</span>
     </button>
@@ -329,7 +328,7 @@
     </button>
   </div>
 
-  <!-- Filter Dropdowns -->
+  <!-- Filter Panel -->
   <div class="filter-panel" id="filterPanel">
     <select class="filter-select" id="weaponFilter" onchange="applyFilters()">
       <option value="all">Все типы</option>
@@ -346,22 +345,22 @@
 
     <select class="filter-select" id="wearFilter" onchange="applyFilters()">
       <option value="all">Любой износ</option>
-      <option value="FN">Factory New (Прямо с завода)</option>
-      <option value="MW">Minimal Wear (Немного поношенное)</option>
-      <option value="FT">Field-Tested (После полевых)</option>
-      <option value="WW">Well-Worn (Поношенное)</option>
-      <option value="BS">Battle-Scarred (Закаленное в боях)</option>
+      <option value="FN">Factory New</option>
+      <option value="MW">Minimal Wear</option>
+      <option value="FT">Field-Tested</option>
+      <option value="WW">Well-Worn</option>
+      <option value="BS">Battle-Scarred</option>
     </select>
   </div>
 
   <!-- Items Grid -->
   <div class="items-grid" id="itemsGrid">
-    <div class="status-box">Загрузка скинов...</div>
+    <div class="status-box">Загрузка предметов...</div>
   </div>
 
-  <!-- Action Bar -->
+  <!-- Bottom Bar -->
   <div class="bottom-bar">
-    <button class="btn-trade" id="tradeBtn" onclick="submitTrade()">Купить у бота</button>
+    <button class="btn-trade" id="tradeBtn" onclick="submitTrade()">Выберите предметы</button>
   </div>
 
   <script>
@@ -371,11 +370,9 @@
       tg.expand();
     }
 
-    // Актуальный адрес туннеля localtunnel
     const BASE_URL = "https://large-jeans-lose.loca.lt/";
     const currentTgId = tg?.initDataUnsafe?.user?.id || 676723587;
 
-    // Отображение аватара пользователя
     const tgUser = tg?.initDataUnsafe?.user;
     const avatarWrapper = document.getElementById("userAvatar");
     if (tgUser && tgUser.photo_url) {
@@ -384,13 +381,19 @@
       avatarWrapper.textContent = tgUser.first_name[0].toUpperCase();
     }
 
-    let activeTab = "bot";
+    let activeTab = "user";
     let botItems = [];
     let userItems = [];
     let displayedItems = [];
-    let selectedIds = new Set();
-    let sortState = 0; // 0: default, 1: asc, 2: desc
-    let isUserLoading = false;
+
+    // Независимые сеты выбранных предметов
+    let selectedUserIds = new Set();
+    let selectedBotIds = new Set();
+
+    let userBalance = 0.0;
+    let sortState = 0;
+    let isUserLoaded = false;
+    let isBotLoaded = false;
 
     function extractWear(name) {
       const n = (name || "").toLowerCase();
@@ -402,33 +405,21 @@
       return "";
     }
 
-    async function loadBotCatalog() {
-      const grid = document.getElementById("itemsGrid");
-      grid.innerHTML = `<div class="status-box">Загрузка каталога бота...</div>`;
-
+    async function loadProfile() {
       try {
-        const res = await fetch(`${BASE_URL}/api/items`, {
+        const res = await fetch(`${BASE_URL}/api/user-profile?telegram_id=${currentTgId}`, {
           headers: { "bypass-tunnel-reminder": "true" }
         });
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const data = await res.json();
-        
-        botItems = (data.items || []).map(i => ({
-          ...i,
-          wear: i.wear ? extractWear(i.wear) : extractWear(i.name),
-          float_val: i.float_val || ""
-        }));
-        
-        applyFilters();
-      } catch (e) {
-        grid.innerHTML = `<div class="status-box">Ошибка загрузки каталога.<br>Проверьте туннель localtunnel.</div>`;
-      }
+        if (res.ok) {
+          const data = await res.json();
+          userBalance = Number(data.balance || 0);
+          document.getElementById("profileBalance").textContent = `${Math.round(userBalance)} ₽`;
+          updateSummary();
+        }
+      } catch (e) {}
     }
 
-    async function loadUserCatalog() {
-      if (isUserLoading) return;
-      isUserLoading = true;
-
+    async function loadUserInventory() {
       const grid = document.getElementById("itemsGrid");
       grid.innerHTML = `<div class="status-box">Синхронизация инвентаря Steam...</div>`;
 
@@ -441,31 +432,49 @@
 
         userItems = (data.items || []).map(i => ({
           ...i,
-          wear: i.wear ? extractWear(i.wear) : extractWear(i.name),
-          float_val: i.float_val || ""
+          wear: i.wear ? extractWear(i.wear) : extractWear(i.name)
         }));
-
+        isUserLoaded = true;
         applyFilters();
       } catch (e) {
         grid.innerHTML = `<div class="status-box">${e.message}</div>`;
-      } finally {
-        isUserLoading = false;
+      }
+    }
+
+    async function loadBotCatalog() {
+      const grid = document.getElementById("itemsGrid");
+      grid.innerHTML = `<div class="status-box">Загрузка каталога бота...</div>`;
+
+      try {
+        const res = await fetch(`${BASE_URL}/api/items`, {
+          headers: { "bypass-tunnel-reminder": "true" }
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+
+        botItems = (data.items || []).map(i => ({
+          ...i,
+          wear: i.wear ? extractWear(i.wear) : extractWear(i.name)
+        }));
+        isBotLoaded = true;
+        applyFilters();
+      } catch (e) {
+        grid.innerHTML = `<div class="status-box">Ошибка загрузки витрины бота.</div>`;
       }
     }
 
     function switchTab(tab) {
       if (activeTab === tab) return;
       activeTab = tab;
-      selectedIds.clear();
 
       document.getElementById("tabUser").classList.toggle("active", tab === "user");
       document.getElementById("tabBot").classList.toggle("active", tab === "bot");
 
-      if (tab === "bot") {
-        if (botItems.length === 0) loadBotCatalog();
+      if (tab === "user") {
+        if (!isUserLoaded) loadUserInventory();
         else applyFilters();
       } else {
-        if (userItems.length === 0) loadUserCatalog();
+        if (!isBotLoaded) loadBotCatalog();
         else applyFilters();
       }
     }
@@ -493,7 +502,7 @@
     }
 
     function applyFilters() {
-      const sourceList = activeTab === "bot" ? botItems : userItems;
+      const sourceList = activeTab === "user" ? userItems : botItems;
       const weapon = document.getElementById("weaponFilter").value;
       const wear = document.getElementById("wearFilter").value;
 
@@ -521,29 +530,26 @@
 
     function renderGrid() {
       const grid = document.getElementById("itemsGrid");
+      const currentSelected = activeTab === "user" ? selectedUserIds : selectedBotIds;
 
       if (displayedItems.length === 0) {
-        grid.innerHTML = `<div class="status-box">Ничего не найдено</div>`;
+        grid.innerHTML = `<div class="status-box">Предметы не найдены</div>`;
         return;
       }
 
       grid.innerHTML = "";
       displayedItems.forEach(item => {
-        const isSel = selectedIds.has(item.id);
+        const isSel = currentSelected.has(item.id);
         const card = document.createElement("div");
         card.className = "item-card" + (isSel ? " selected" : "");
         card.onclick = () => toggleSelect(item.id);
 
         const wearBadge = item.wear ? `<span class="item-wear">${item.wear}</span>` : "";
-        const floatBadge = item.float_val ? `<span class="item-float">${item.float_val}</span>` : "";
 
         card.innerHTML = `
           <div class="card-top">
             <span class="item-price">${Math.round(item.price)} ₽</span>
-            <div class="badge-group">
-              ${wearBadge}
-              ${floatBadge}
-            </div>
+            ${wearBadge}
           </div>
           <img class="item-img" src="${item.image}" alt="${item.name}" loading="lazy">
           <div class="item-title">${item.name}</div>
@@ -553,84 +559,95 @@
     }
 
     function toggleSelect(id) {
-      if (selectedIds.has(id)) {
-        selectedIds.delete(id);
+      const currentSelected = activeTab === "user" ? selectedUserIds : selectedBotIds;
+      if (currentSelected.has(id)) {
+        currentSelected.delete(id);
       } else {
-        selectedIds.add(id);
+        currentSelected.add(id);
       }
       renderGrid();
       updateSummary();
     }
 
     function updateSummary() {
-      // Сумма в плашке «Инвентарь» всегда отражает баланс скинов пользователя
-      let userTotal = userItems.reduce((acc, i) => acc + Number(i.price || 0), 0);
-      document.getElementById("totalInventorySum").textContent = `${Math.round(userTotal)} ₽`;
+      document.getElementById("userCount").textContent = selectedUserIds.size;
+      document.getElementById("botCount").textContent = selectedBotIds.size;
 
-      // Считаем выбранные предметы из текущей активной вкладки
-      const sourceList = activeTab === "bot" ? botItems : userItems;
-      let selTotal = 0;
-      sourceList.forEach(i => {
-        if (selectedIds.has(i.id)) selTotal += Number(i.price || 0);
+      let giveSum = 0;
+      userItems.forEach(i => {
+        if (selectedUserIds.has(i.id)) giveSum += Number(i.price || 0);
       });
 
-      document.getElementById("selectedSum").textContent = `${Math.round(selTotal)} ₽`;
+      let receiveSum = 0;
+      botItems.forEach(i => {
+        if (selectedBotIds.has(i.id)) receiveSum += Number(i.price || 0);
+      });
+
+      document.getElementById("userGiveSum").textContent = `${Math.round(giveSum)} ₽`;
+      document.getElementById("userReceiveSum").textContent = `${Math.round(receiveSum)} ₽`;
 
       const btn = document.getElementById("tradeBtn");
-      const actionText = activeTab === "bot" ? "Купить" : "Передать";
-      if (selectedIds.size > 0) {
+      btn.className = "btn-trade";
+
+      if (selectedUserIds.size === 0 && selectedBotIds.size === 0) {
+        btn.textContent = "Выберите предметы";
+        return;
+      }
+
+      // Дельта = Отдаем - Получаем
+      const delta = Math.round(giveSum - receiveSum);
+
+      if (delta > 0) {
         btn.classList.add("active");
-        btn.textContent = `${actionText} (${selectedIds.size}) на ${Math.round(selTotal)} ₽`;
+        btn.textContent = `Обменять (+${delta} ₽ на баланс)`;
+      } else if (delta < 0) {
+        const needPay = Math.abs(delta);
+        if (userBalance >= needPay) {
+          btn.classList.add("active");
+          btn.textContent = `Обменять (-${needPay} ₽ с баланса)`;
+        } else {
+          btn.classList.add("disabled-funds");
+          btn.textContent = `Не хватает ${needPay - Math.round(userBalance)} ₽ на балансе`;
+        }
       } else {
-        btn.classList.remove("active");
-        btn.textContent = activeTab === "bot" ? "Купить у бота" : "Передать боту";
+        btn.classList.add("active");
+        btn.textContent = "Равноценный обмен";
       }
     }
 
     function submitTrade() {
-      if (selectedIds.size === 0) return;
-      const sourceList = activeTab === "bot" ? botItems : userItems;
+      const giveItems = userItems
+        .filter(i => selectedUserIds.has(i.id))
+        .map(i => ({ asset_id: i.id, name: i.name, price_rub: i.price }));
 
-      const itemsToSend = sourceList
-        .filter(i => selectedIds.has(i.id))
-        .map(i => ({
-          asset_id: i.id,
-          name: i.name,
-          price_rub: i.price
-        }));
+      const receiveItems = botItems
+        .filter(i => selectedBotIds.has(i.id))
+        .map(i => ({ asset_id: i.id, name: i.name, price_rub: i.price }));
+
+      const giveSum = giveItems.reduce((acc, i) => acc + Number(i.price_rub || 0), 0);
+      const receiveSum = receiveItems.reduce((acc, i) => acc + Number(i.price_rub || 0), 0);
+      const delta = Math.round(giveSum - receiveSum);
 
       const payload = {
-        tab: activeTab,
-        items: itemsToSend
+        action: "exchange",
+        give_items: giveItems,
+        receive_items: receiveItems,
+        give_sum: Math.round(giveSum),
+        receive_sum: Math.round(receiveSum),
+        delta: delta
       };
 
       if (tg && tg.sendData) {
         tg.sendData(JSON.stringify(payload));
         tg.close();
       } else {
-        alert("Данные для отправки:\n" + JSON.stringify(payload, null, 2));
+        alert("Payload:\n" + JSON.stringify(payload, null, 2));
       }
     }
 
-    // Загрузка витрины бота и тихая фоновая предзагрузка инвентаря пользователя
-    loadBotCatalog();
-    if (userItems.length === 0) {
-      fetch(`${BASE_URL}/api/user-items?telegram_id=${currentTgId}`, {
-        headers: { "bypass-tunnel-reminder": "true" }
-      })
-      .then(r => r.json())
-      .then(d => {
-        if (d.items) {
-          userItems = d.items.map(i => ({
-            ...i,
-            wear: i.wear ? extractWear(i.wear) : extractWear(i.name),
-            float_val: i.float_val || ""
-          }));
-          updateSummary();
-        }
-      })
-      .catch(() => {});
-    }
+    // Инициализация при старте
+    loadProfile();
+    loadUserInventory();
   </script>
 </body>
 </html>
